@@ -36,7 +36,7 @@ class _ProductListView extends StatelessWidget {
           children: [
             // Buscador
             _SearchBar(),
-            const SizedBox(height: 32),
+            const SizedBox(height: 50),
             const Text(
               'Productos',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
@@ -50,7 +50,12 @@ class _ProductListView extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is ProductsLoaded) {
                     if (state.products.isEmpty) {
-                      return const Center(child: Text('No hay productos'));
+                      return const Center(
+                        child: Text(
+                          'No hay productos registrados',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      );
                     }
                     return ListView.separated(
                       itemCount: state.products.length,
@@ -80,7 +85,11 @@ class _ProductListView extends StatelessWidget {
                                   children: [
                                     Text('Stock: ${product.stock}'),
                                     Text(
-                                      ' [32m${product.price.toStringAsFixed(2)} [0m',
+                                      '\$${product.price.toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -91,7 +100,12 @@ class _ProductListView extends StatelessWidget {
                       },
                     );
                   } else if (state is ProductsEmpty) {
-                    return const Center(child: Text('No hay productos'));
+                    return const Center(
+                      child: Text(
+                        'No hay productos registrados',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
                   } else if (state is ProductError) {
                     return Center(child: Text(state.message));
                   }
@@ -102,19 +116,8 @@ class _ProductListView extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        width: 72,
-        height: 72,
-        child: FloatingActionButton(
-          shape: const BeveledRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
-          onPressed: () {},
-          child: const Icon(Icons.add, size: 32),
-        ),
-      ),
-      bottomNavigationBar: const _BottomMenuButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _DiamondAddButton(),
     );
   }
 }
@@ -124,7 +127,7 @@ class _SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: const InputDecoration(
-        hintText: 'Buscar',
+        hintText: 'Buscar productos',
         border: OutlineInputBorder(),
         prefixIcon: Icon(Icons.search),
       ),
@@ -135,30 +138,59 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-class _BottomMenuButton extends StatelessWidget {
-  const _BottomMenuButton();
-
+class _DiamondAddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Align(
-        alignment: Alignment.bottomRight,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 24.0, bottom: 16.0),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () {},
-              child: const SizedBox(
-                width: 48,
-                height: 48,
-                child: Icon(Icons.menu, size: 32),
-              ),
-            ),
-          ),
-        ),
+    return Container(
+      width: 80,
+      height: 80,
+      child: FloatingActionButton(
+        shape: const DiamondBorder(),
+        onPressed: () {
+          // TODO: Implementar navegación a pantalla "Add product"
+        },
+        child: const Icon(Icons.add, size: 32),
       ),
     );
   }
+}
+
+class DiamondBorder extends ShapeBorder {
+  const DiamondBorder();
+
+  @override
+  EdgeInsetsGeometry get dimensions => const EdgeInsets.all(0);
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    return getOuterPath(rect, textDirection: textDirection);
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    final center = rect.center;
+    final width = rect.width;
+    final height = rect.height;
+
+    final path = Path();
+    path.moveTo(center.dx, center.dy - height / 2); // Top
+    path.lineTo(center.dx + width / 2, center.dy); // Right
+    path.lineTo(center.dx, center.dy + height / 2); // Bottom
+    path.lineTo(center.dx - width / 2, center.dy); // Left
+    path.close();
+
+    return path;
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
+
+  @override
+  ShapeBorder scale(double t) => this;
+
+  @override
+  ShapeBorder? lerpFrom(ShapeBorder? a, double t) => this;
+
+  @override
+  ShapeBorder? lerpTo(ShapeBorder? b, double t) => this;
 }
