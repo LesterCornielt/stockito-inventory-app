@@ -7,18 +7,21 @@ import '../../features/products/domain/usecases/delete_product.dart';
 import '../../features/products/domain/usecases/get_all_products.dart';
 import '../../features/products/domain/usecases/search_products.dart';
 import '../../features/products/domain/usecases/update_product.dart';
+import '../../features/products/presentation/bloc/product_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // Bloc
-  // sl.registerFactory(() => ProductBloc(
-  //   getAllProducts: sl(),
-  //   createProduct: sl(),
-  //   updateProduct: sl(),
-  //   deleteProduct: sl(),
-  //   searchProducts: sl(),
-  // ));
+  sl.registerFactory(
+    () => ProductBloc(
+      getAllProducts: sl(),
+      createProduct: sl(),
+      updateProduct: sl(),
+      deleteProduct: sl(),
+      searchProducts: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetAllProducts(sl()));

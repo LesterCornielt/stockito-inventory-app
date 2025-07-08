@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';
 import 'get_all_products.dart';
