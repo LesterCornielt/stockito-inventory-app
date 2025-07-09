@@ -8,6 +8,7 @@ import '../../features/products/domain/usecases/get_all_products.dart';
 import '../../features/products/domain/usecases/search_products.dart';
 import '../../features/products/domain/usecases/update_product.dart';
 import '../../features/products/presentation/bloc/product_bloc.dart';
+import '../../features/navigation/presentation/bloc/navigation_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -22,6 +23,7 @@ Future<void> init() async {
       searchProducts: sl(),
     ),
   );
+  sl.registerFactory(() => NavigationBloc());
 
   // Use cases
   sl.registerLazySingleton(() => GetAllProducts(sl()));
