@@ -27,9 +27,12 @@ class _MainNavigationView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: _buildBody(state.currentIndex),
-          bottomNavigationBar: _buildBottomNavigationBar(
-            context,
-            state.currentIndex,
+          backgroundColor: Colors.white,
+          bottomNavigationBar: _CustomBottomNavBar(
+            currentIndex: state.currentIndex,
+            onTap: (index) {
+              context.read<NavigationBloc>().add(NavigationChanged(index));
+            },
           ),
         );
       },
@@ -50,33 +53,98 @@ class _MainNavigationView extends StatelessWidget {
         return const ProductListPage();
     }
   }
+}
 
-  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
-      onTap: (index) {
-        context.read<NavigationBloc>().add(NavigationChanged(index));
-      },
-      selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Colors.grey,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.inventory),
-          label: 'Productos',
+class _CustomBottomNavBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  const _CustomBottomNavBar({required this.currentIndex, required this.onTap});
+
+  static const _items = [
+    _NavBarItemData(Icons.inventory, 'Productos'),
+    _NavBarItemData(Icons.point_of_sale, 'Ventas'),
+    _NavBarItemData(Icons.analytics, 'Reportes'),
+    _NavBarItemData(Icons.settings, 'Configuración'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 24,
+        right: 24,
+        bottom: 32,
+      ), // Más separación inferior
+      child: PhysicalModel(
+        color: Colors.transparent,
+        elevation: 12,
+        borderRadius: BorderRadius.circular(32),
+        shadowColor: Colors.black12,
+        child: Container(
+          height: 72, // Un poco más alto para mejor centrado
+          decoration: BoxDecoration(
+            color: const Color(0xFF1976D2),
+            borderRadius: BorderRadius.circular(32),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center, // Centrado vertical
+            children: List.generate(_items.length, (index) {
+              final item = _items[index];
+              final isSelected = index == currentIndex;
+              return Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () => onTap(index),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 6,
+                    ), // Centrado
+                    decoration: isSelected
+                        ? BoxDecoration(
+                            color: Colors.white.withOpacity(0.18),
+                            borderRadius: BorderRadius.circular(24),
+                          )
+                        : null,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          item.icon,
+                          color: isSelected ? Colors.white : Colors.white70,
+                          size: 28,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.white70,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.point_of_sale),
-          label: 'Ventas',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Reportes'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Configuración',
-        ),
-      ],
+      ),
     );
   }
+}
+
+class _NavBarItemData {
+  final IconData icon;
+  final String label;
+  const _NavBarItemData(this.icon, this.label);
 }
 
 // Placeholder pages - these will be implemented later

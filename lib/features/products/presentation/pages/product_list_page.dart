@@ -33,9 +33,24 @@ class _ProductListView extends StatelessWidget {
               // Barra de búsqueda en la parte superior
               _SearchBar(),
               const SizedBox(height: 24),
-              const Text(
-                'Productos',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              // Pill para el título 'Productos'
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1976D2),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: const Text(
+                  'Productos',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               // Lista de productos
@@ -113,11 +128,24 @@ class _ProductListView extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Implementar navegación a pantalla "Add product"
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: PhysicalModel(
+        color: Colors.transparent,
+        elevation: 12,
+        shadowColor: Colors.black26,
+        shape: BoxShape.circle,
+        child: SizedBox(
+          width: 72,
+          height: 72,
+          child: FloatingActionButton(
+            onPressed: () {
+              // TODO: Implementar navegación a pantalla "Add product"
+            },
+            backgroundColor: const Color(0xFF1976D2),
+            shape: const CircleBorder(),
+            child: const Icon(Icons.add, color: Colors.white, size: 40),
+            elevation: 0, // Elevación visual la da PhysicalModel
+          ),
+        ),
       ),
     );
   }
