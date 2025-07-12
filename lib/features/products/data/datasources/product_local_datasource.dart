@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/product_model.dart';
+import '../../../../core/utils/sample_data_generator.dart';
 
 abstract class ProductLocalDataSource {
   Future<List<ProductModel>> getAllProducts();
@@ -9,6 +10,7 @@ abstract class ProductLocalDataSource {
   Future<int> createProduct(ProductModel product);
   Future<bool> updateProduct(ProductModel product);
   Future<bool> deleteProduct(int id);
+  Future<void> populateWithSampleData();
 }
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
@@ -99,5 +101,24 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     final db = await database;
     final count = await db.delete('products', where: 'id = ?', whereArgs: [id]);
     return count > 0;
+  }
+
+  @override
+  Future<void> populateWithSampleData() async {
+    final db = await database;
+
+    // Check if database is already populated
+    final existingProducts = await db.query('products');
+    if (existingProducts.isNotEmpty) {
+      return; // Database already has data
+    }
+
+    // Get sample products
+    final sampleProducts = SampleDataGenerator.getSampleProducts();
+
+    // Insert all sample products
+    for (final product in sampleProducts) {
+      await db.insert('products', product.toMap());
+    }
   }
 }

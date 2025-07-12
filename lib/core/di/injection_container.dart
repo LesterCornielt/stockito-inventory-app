@@ -7,6 +7,7 @@ import '../../features/products/domain/usecases/delete_product.dart';
 import '../../features/products/domain/usecases/get_all_products.dart';
 import '../../features/products/domain/usecases/search_products.dart';
 import '../../features/products/domain/usecases/update_product.dart';
+import '../../features/products/domain/usecases/populate_sample_data.dart';
 import '../../features/products/presentation/bloc/product_bloc.dart';
 import '../../features/navigation/presentation/bloc/navigation_bloc.dart';
 
@@ -21,6 +22,7 @@ Future<void> init() async {
       updateProduct: sl(),
       deleteProduct: sl(),
       searchProducts: sl(),
+      populateSampleData: sl(),
     ),
   );
   sl.registerFactory(() => NavigationBloc());
@@ -31,6 +33,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateProduct(sl()));
   sl.registerLazySingleton(() => DeleteProduct(sl()));
   sl.registerLazySingleton(() => SearchProducts(sl()));
+  sl.registerLazySingleton(() => PopulateSampleData(sl()));
 
   // Repository
   sl.registerLazySingleton<ProductRepository>(

@@ -8,6 +8,7 @@ abstract class ProductRepository {
   Future<int> createProduct(Product product);
   Future<bool> updateProduct(Product product);
   Future<bool> deleteProduct(int id);
+  Future<void> populateWithSampleData();
 }
 
 class ProductFailure extends Equatable {

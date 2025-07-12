@@ -61,3 +61,7 @@ class DeleteProduct extends ProductEvent {
 class ClearSearch extends ProductEvent {
   const ClearSearch();
 }
+
+class PopulateSampleData extends ProductEvent {
+  const PopulateSampleData();
+}

@@ -66,4 +66,13 @@ class ProductRepositoryImpl implements ProductRepository {
       throw ProductFailure(message: 'Error al eliminar producto: $e');
     }
   }
+
+  @override
+  Future<void> populateWithSampleData() async {
+    try {
+      await localDataSource.populateWithSampleData();
+    } catch (e) {
+      throw ProductFailure(message: 'Error al poblar datos de muestra: $e');
+    }
+  }
 }

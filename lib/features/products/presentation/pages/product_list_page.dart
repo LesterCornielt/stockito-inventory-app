@@ -111,10 +111,35 @@ class _ProductListView extends StatelessWidget {
                         },
                       );
                     } else if (state is ProductsEmpty) {
-                      return const Center(
-                        child: Text(
-                          'No hay productos registrados',
-                          style: TextStyle(fontSize: 16),
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'No hay productos registrados',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                context.read<ProductBloc>().add(
+                                  const PopulateSampleData(),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF1976D2),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text('Cargar Productos de Ejemplo'),
+                            ),
+                          ],
                         ),
                       );
                     } else if (state is ProductError) {
@@ -142,8 +167,12 @@ class _ProductListView extends StatelessWidget {
             },
             backgroundColor: const Color(0xFF1976D2),
             shape: const CircleBorder(),
-            child: const Icon(Icons.add, color: Colors.white, size: 40),
-            elevation: 0, // Elevación visual la da PhysicalModel
+            elevation: 0,
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 40,
+            ), // Elevación visual la da PhysicalModel
           ),
         ),
       ),
