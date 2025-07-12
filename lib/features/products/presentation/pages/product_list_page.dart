@@ -94,7 +94,7 @@ class _ProductListView extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Stock: ${product.stock}'),
+                                      Text('Cantidad: ${product.stock}'),
                                       Text(
                                         '\$${product.price.toStringAsFixed(2)}',
                                         style: const TextStyle(
