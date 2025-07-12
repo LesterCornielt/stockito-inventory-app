@@ -58,9 +58,17 @@ class _ProductListView extends StatelessWidget {
                       icon: const Icon(Icons.more_vert),
                       onSelected: (value) {
                         if (value == 'edit') {
-                          _showEditDialog(context, product);
+                          _showEditDialog(
+                            context,
+                            product,
+                            context.read<ProductBloc>(),
+                          );
                         } else if (value == 'delete') {
-                          _showDeleteDialog(context, product);
+                          _showDeleteDialog(
+                            context,
+                            product,
+                            context.read<ProductBloc>(),
+                          );
                         }
                       },
                       itemBuilder: (BuildContext context) => [
@@ -159,7 +167,11 @@ class _ProductListView extends StatelessWidget {
     );
   }
 
-  void _showEditDialog(BuildContext context, Product product) {
+  void _showEditDialog(
+    BuildContext context,
+    Product product,
+    ProductBloc bloc,
+  ) {
     final nameController = TextEditingController(text: product.name);
     final priceController = TextEditingController(
       text: product.price.toString(),
@@ -213,23 +225,59 @@ class _ProductListView extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 final newName = nameController.text.trim();
-                final newPrice =
-                    double.tryParse(priceController.text) ?? product.price;
-                final newStock =
-                    int.tryParse(stockController.text) ?? product.stock;
+                final newPrice = double.tryParse(priceController.text);
+                final newStock = int.tryParse(stockController.text);
 
-                if (newName.isNotEmpty) {
-                  final updatedProduct = product.copyWith(
-                    name: newName,
-                    price: newPrice,
-                    stock: newStock,
-                    updatedAt: DateTime.now(),
+                if (newName.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'El nombre del producto no puede estar vacío',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
                   );
-                  context.read<ProductBloc>().add(
-                    UpdateProduct(updatedProduct),
-                  );
-                  Navigator.of(context).pop();
+                  return;
                 }
+
+                if (newPrice == null || newPrice < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'El precio debe ser un número válido mayor o igual a 0',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                if (newStock == null || newStock < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'La cantidad debe ser un número entero mayor o igual a 0',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                final updatedProduct = product.copyWith(
+                  name: newName,
+                  price: newPrice,
+                  stock: newStock,
+                  updatedAt: DateTime.now(),
+                );
+                bloc.add(UpdateProduct(updatedProduct));
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Producto actualizado exitosamente'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               },
               child: const Text('Guardar'),
             ),
@@ -239,7 +287,11 @@ class _ProductListView extends StatelessWidget {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, Product product) {
+  void _showDeleteDialog(
+    BuildContext context,
+    Product product,
+    ProductBloc bloc,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -255,8 +307,16 @@ class _ProductListView extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                context.read<ProductBloc>().add(DeleteProduct(product.id!));
+                bloc.add(DeleteProduct(product.id!));
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Producto "${product.name}" eliminado exitosamente',
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
