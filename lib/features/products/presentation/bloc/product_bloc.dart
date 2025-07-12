@@ -195,11 +195,36 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await deleteProduct(event.productId);
       if (success) {
-        // Recargar la lista de productos
-        final products = await getAllProducts(NoParams());
-        emit(
-          ProductDeleted(products: products, deletedProductId: event.productId),
-        );
+        // Actualizar la lista removiendo el producto eliminado
+        if (currentState is ProductsLoaded) {
+          final updatedProducts = currentState.products
+              .where((product) => product.id != event.productId)
+              .toList();
+
+          if (updatedProducts.isEmpty) {
+            emit(const ProductsEmpty());
+          } else {
+            emit(
+              ProductDeleted(
+                products: updatedProducts,
+                deletedProductId: event.productId,
+              ),
+            );
+          }
+        } else {
+          // Si no hay estado actual, recargar desde la base de datos
+          final products = await getAllProducts(NoParams());
+          if (products.isEmpty) {
+            emit(const ProductsEmpty());
+          } else {
+            emit(
+              ProductDeleted(
+                products: products,
+                deletedProductId: event.productId,
+              ),
+            );
+          }
+        }
       } else {
         throw Exception('No se pudo eliminar el producto');
       }
