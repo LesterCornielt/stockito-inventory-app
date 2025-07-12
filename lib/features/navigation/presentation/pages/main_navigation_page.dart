@@ -211,7 +211,7 @@ class _CustomBottomNavBar extends StatelessWidget {
     _NavBarItemData(Icons.inventory, 'Productos'),
     _NavBarItemData(Icons.list, 'Listas'),
     _NavBarItemData(Icons.analytics, 'Reportes'),
-    _NavBarItemData(Icons.settings, 'Configuración'),
+    _NavBarItemData(Icons.settings, 'Opciones'),
   ];
 
   @override
