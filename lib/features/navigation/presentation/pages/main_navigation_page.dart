@@ -5,6 +5,8 @@ import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../products/presentation/pages/product_list_page.dart';
+import '../../../products/presentation/bloc/product_bloc.dart';
+import '../../../products/presentation/bloc/product_event.dart';
 import '../../../lists/presentation/pages/lists_page.dart';
 
 class MainNavigationPage extends StatelessWidget {
@@ -12,8 +14,13 @@ class MainNavigationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<NavigationBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<NavigationBloc>()),
+        BlocProvider(
+          create: (_) => sl<ProductBloc>()..add(const LoadProducts()),
+        ),
+      ],
       child: const _MainNavigationView(),
     );
   }
@@ -22,6 +29,119 @@ class MainNavigationPage extends StatelessWidget {
 class _MainNavigationView extends StatelessWidget {
   const _MainNavigationView();
 
+  void _showAddProductDialog(BuildContext context, ProductBloc productBloc) {
+    final nameController = TextEditingController();
+    final priceController = TextEditingController();
+    final stockController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Añadir Producto'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: priceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Precio (CUP)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: stockController,
+                  decoration: const InputDecoration(
+                    labelText: 'Cantidad',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final name = nameController.text.trim();
+                final price = double.tryParse(priceController.text);
+                final stock = int.tryParse(stockController.text);
+
+                if (name.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'El nombre del producto no puede estar vacío',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                if (price == null || price < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'El precio debe ser un número válido mayor o igual a 0',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                if (stock == null || stock < 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'La cantidad debe ser un número entero mayor o igual a 0',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                productBloc.add(
+                  CreateProduct(
+                    name: name,
+                    description: '', // Descripción vacía por defecto
+                    price: price,
+                    stock: stock,
+                  ),
+                );
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Producto añadido exitosamente'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              child: const Text('Añadir'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
@@ -29,6 +149,32 @@ class _MainNavigationView extends StatelessWidget {
         return Scaffold(
           body: _buildBody(state.currentIndex),
           backgroundColor: Colors.white,
+          floatingActionButton: state.currentIndex == 0
+              ? PhysicalModel(
+                  color: Colors.transparent,
+                  elevation: 12,
+                  shadowColor: Colors.black26,
+                  shape: BoxShape.circle,
+                  child: SizedBox(
+                    width: 72,
+                    height: 72,
+                    child: FloatingActionButton(
+                      onPressed: () => _showAddProductDialog(
+                        context,
+                        context.read<ProductBloc>(),
+                      ),
+                      backgroundColor: const Color(0xFF1976D2),
+                      shape: const CircleBorder(),
+                      elevation: 0,
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                )
+              : null,
           bottomNavigationBar: _CustomBottomNavBar(
             currentIndex: state.currentIndex,
             onTap: (index) {

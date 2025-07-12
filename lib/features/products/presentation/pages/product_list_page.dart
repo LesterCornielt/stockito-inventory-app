@@ -11,10 +11,7 @@ class ProductListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<ProductBloc>()..add(const LoadProducts()),
-      child: const _ProductListView(),
-    );
+    return const _ProductListView();
   }
 }
 
@@ -419,29 +416,6 @@ class _ProductListView extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-      floatingActionButton: PhysicalModel(
-        color: Colors.transparent,
-        elevation: 12,
-        shadowColor: Colors.black26,
-        shape: BoxShape.circle,
-        child: SizedBox(
-          width: 72,
-          height: 72,
-          child: FloatingActionButton(
-            onPressed: () {
-              // TODO: Implementar navegación a pantalla "Add product"
-            },
-            backgroundColor: const Color(0xFF1976D2),
-            shape: const CircleBorder(),
-            elevation: 0,
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 40,
-            ), // Elevación visual la da PhysicalModel
           ),
         ),
       ),

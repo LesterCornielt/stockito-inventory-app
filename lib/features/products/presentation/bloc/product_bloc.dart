@@ -45,7 +45,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       if (products.isEmpty) {
         emit(const ProductsEmpty());
       } else {
-        emit(ProductsLoaded(products: products));
+        // Ordenar por fecha de creación (más reciente primero)
+        final sortedProducts = List<Product>.from(products)
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        emit(ProductsLoaded(products: sortedProducts));
       }
     } catch (e) {
       emit(ProductError(message: e.toString()));
@@ -121,9 +124,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final productId = await createProduct(product);
       final createdProduct = product.copyWith(id: productId);
 
-      // Recargar la lista de productos
+      // Recargar la lista de productos y ordenar por fecha de creación (más reciente primero)
       final products = await getAllProducts(NoParams());
-      emit(ProductCreated(products: products, product: createdProduct));
+      final sortedProducts = List<Product>.from(products)
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      emit(ProductCreated(products: sortedProducts, product: createdProduct));
     } catch (e) {
       final currentState = state;
       if (currentState is ProductsLoaded) {
