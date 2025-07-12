@@ -160,9 +160,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await updateProduct(updatedProduct);
       if (success) {
-        // Recargar la lista de productos
+        // Recargar la lista de productos y ordenar por fecha de actualización (más reciente primero)
         final products = await getAllProducts(NoParams());
-        emit(ProductUpdated(products: products, product: updatedProduct));
+        final sortedProducts = List<Product>.from(products)
+          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+        emit(ProductUpdated(products: sortedProducts, product: updatedProduct));
       } else {
         throw Exception('No se pudo actualizar el producto');
       }
