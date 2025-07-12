@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../presentation/bloc/product_bloc.dart';
 import '../../presentation/bloc/product_event.dart';
 import '../../presentation/bloc/product_state.dart';
+import '../../domain/entities/product.dart';
 import '../../../../../../core/di/injection_container.dart';
 
 class ProductListPage extends StatelessWidget {
@@ -19,6 +20,104 @@ class ProductListPage extends StatelessWidget {
 
 class _ProductListView extends StatelessWidget {
   const _ProductListView();
+
+  Widget _buildProductList(List<Product> products, BuildContext context) {
+    if (products.isEmpty) {
+      return const Center(
+        child: Text(
+          'No hay productos registrados',
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
+    return ListView.separated(
+      itemCount: products.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final product = products[index];
+        return Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(product.description),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text('Cantidad: ${product.stock}'),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          onPressed: product.stock > 0
+                              ? () {
+                                  final updatedProduct = product.copyWith(
+                                    stock: product.stock - 1,
+                                    updatedAt: DateTime.now(),
+                                  );
+                                  context.read<ProductBloc>().add(
+                                    UpdateProduct(updatedProduct),
+                                  );
+                                }
+                              : null,
+                          icon: const Icon(Icons.remove),
+                          style: IconButton.styleFrom(
+                            backgroundColor: product.stock > 0
+                                ? Colors.red.shade100
+                                : Colors.grey.shade200,
+                            foregroundColor: product.stock > 0
+                                ? Colors.red.shade700
+                                : Colors.grey.shade500,
+                            minimumSize: const Size(32, 32),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          onPressed: () {
+                            final updatedProduct = product.copyWith(
+                              stock: product.stock + 1,
+                              updatedAt: DateTime.now(),
+                            );
+                            context.read<ProductBloc>().add(
+                              UpdateProduct(updatedProduct),
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.green.shade100,
+                            foregroundColor: Colors.green.shade700,
+                            minimumSize: const Size(32, 32),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '\$${product.price.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,56 +159,7 @@ class _ProductListView extends StatelessWidget {
                     if (state is ProductLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is ProductsLoaded) {
-                      if (state.products.isEmpty) {
-                        return const Center(
-                          child: Text(
-                            'No hay productos registrados',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        );
-                      }
-                      return ListView.separated(
-                        itemCount: state.products.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 16),
-                        itemBuilder: (context, index) {
-                          final product = state.products[index];
-                          return Card(
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(product.description),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('Cantidad: ${product.stock}'),
-                                      Text(
-                                        '\$${product.price.toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                      return _buildProductList(state.products, context);
                     } else if (state is ProductsEmpty) {
                       return Center(
                         child: Column(
@@ -142,6 +192,14 @@ class _ProductListView extends StatelessWidget {
                           ],
                         ),
                       );
+                    } else if (state is ProductUpdated) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductCreated) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductDeleted) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductOperationLoading) {
+                      return _buildProductList(state.products, context);
                     } else if (state is ProductError) {
                       return Center(child: Text(state.message));
                     }
