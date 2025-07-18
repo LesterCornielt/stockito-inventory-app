@@ -45,10 +45,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       if (products.isEmpty) {
         emit(const ProductsEmpty());
       } else {
-        // Ordenar por fecha de creación (más reciente primero)
-        final sortedProducts = List<Product>.from(products)
-          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        emit(ProductsLoaded(products: sortedProducts));
+        emit(ProductsLoaded(products: products));
       }
     } catch (e) {
       emit(ProductError(message: e.toString()));
@@ -124,11 +121,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final productId = await createProduct(product);
       final createdProduct = product.copyWith(id: productId);
 
-      // Recargar la lista de productos y ordenar por fecha de creación (más reciente primero)
+      // Recargar la lista de productos (sin ordenar)
       final products = await getAllProducts(NoParams());
-      final sortedProducts = List<Product>.from(products)
-        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      emit(ProductCreated(products: sortedProducts, product: createdProduct));
+      emit(ProductCreated(products: products, product: createdProduct));
     } catch (e) {
       final currentState = state;
       if (currentState is ProductsLoaded) {
@@ -160,11 +155,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await updateProduct(updatedProduct);
       if (success) {
-        // Recargar la lista de productos y ordenar por fecha de actualización (más reciente primero)
+        // Recargar la lista de productos (sin ordenar)
         final products = await getAllProducts(NoParams());
-        final sortedProducts = List<Product>.from(products)
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-        emit(ProductUpdated(products: sortedProducts, product: updatedProduct));
+        emit(ProductUpdated(products: products, product: updatedProduct));
       } else {
         throw Exception('No se pudo actualizar el producto');
       }

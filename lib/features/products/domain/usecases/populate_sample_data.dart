@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import '../repositories/product_repository.dart';
 
 class PopulateSampleData {
