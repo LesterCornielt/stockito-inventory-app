@@ -322,9 +322,16 @@ class _SettingsPage extends StatelessWidget {
     return const Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text(
-            'Página de Configuración',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.settings, size: 80, color: Colors.grey),
+              SizedBox(height: 16),
+              Text(
+                'Pendiente a desarrollar',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
         ),
       ),

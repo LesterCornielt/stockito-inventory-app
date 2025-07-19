@@ -41,27 +41,14 @@ class ListsPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.list_alt,
-                        size: 80,
-                        color: Colors.grey.shade400,
-                      ),
+                      Icon(Icons.list_alt, size: 80, color: Colors.grey),
                       const SizedBox(height: 16),
-                      Text(
-                        'No hay listas creadas',
+                      const Text(
+                        'Pendiente a desarrollar',
                         style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey.shade600,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Crea tu primera lista para organizar productos',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade500,
-                        ),
-                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
