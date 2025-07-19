@@ -8,6 +8,7 @@ import '../../domain/usecases/search_products.dart' as search_use_case;
 import '../../domain/usecases/update_product.dart' as update_use_case;
 import '../../domain/usecases/populate_sample_data.dart' as populate_use_case;
 import '../../domain/usecases/register_sale_from_stock_update.dart';
+import '../../../../core/utils/persistence_service.dart';
 import 'product_event.dart';
 import 'product_state.dart';
 
@@ -37,6 +38,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<ClearSearch>(_onClearSearch);
     on<PopulateSampleData>(_onPopulateSampleData);
     on<RegisterSale>(_onRegisterSale);
+    on<LoadSavedSearch>(_onLoadSavedSearch);
   }
 
   Future<void> _onLoadProducts(
@@ -64,6 +66,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       add(const LoadProducts());
       return;
     }
+
+    // Guardar la búsqueda
+    await PersistenceService.saveLastSearchQuery(event.query);
 
     try {
       final currentState = state;
@@ -96,6 +101,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
   }
 
+  Future<void> _onLoadSavedSearch(
+    LoadSavedSearch event,
+    Emitter<ProductState> emit,
+  ) async {
+    final savedQuery = await PersistenceService.getLastSearchQuery();
+    if (savedQuery != null && savedQuery.isNotEmpty) {
+      add(SearchProducts(savedQuery));
+    }
+  }
+
   Future<void> _onCreateProduct(
     CreateProduct event,
     Emitter<ProductState> emit,
@@ -125,9 +140,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final productId = await createProduct(product);
       final createdProduct = product.copyWith(id: productId);
 
-      // Recargar la lista de productos (sin ordenar)
-      final products = await getAllProducts(NoParams());
-      emit(ProductCreated(products: products, product: createdProduct));
+      // Si hay un estado actual con productos, agregar el nuevo producto a la lista
+      if (currentState is ProductsLoaded) {
+        final updatedProducts = [...currentState.products, createdProduct];
+        emit(
+          ProductCreated(
+            products: updatedProducts,
+            product: createdProduct,
+            searchQuery: currentState.searchQuery,
+          ),
+        );
+      } else {
+        // Si no hay estado actual, recargar desde la base de datos
+        final products = await getAllProducts(NoParams());
+        emit(ProductCreated(products: products, product: createdProduct));
+      }
     } catch (e) {
       final currentState = state;
       if (currentState is ProductsLoaded) {
@@ -159,9 +186,27 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await updateProduct(updatedProduct);
       if (success) {
-        // Recargar la lista de productos (sin ordenar)
-        final products = await getAllProducts(NoParams());
-        emit(ProductUpdated(products: products, product: updatedProduct));
+        // Si hay un estado actual con productos, actualizar solo el producto específico
+        if (currentState is ProductsLoaded) {
+          final updatedProducts = currentState.products.map((product) {
+            if (product.id == updatedProduct.id) {
+              return updatedProduct;
+            }
+            return product;
+          }).toList();
+
+          emit(
+            ProductUpdated(
+              products: updatedProducts,
+              product: updatedProduct,
+              searchQuery: currentState.searchQuery,
+            ),
+          );
+        } else {
+          // Si no hay estado actual, recargar desde la base de datos
+          final products = await getAllProducts(NoParams());
+          emit(ProductUpdated(products: products, product: updatedProduct));
+        }
       } else {
         throw Exception('No se pudo actualizar el producto');
       }
@@ -243,6 +288,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     ClearSearch event,
     Emitter<ProductState> emit,
   ) async {
+    // Limpiar la búsqueda guardada
+    await PersistenceService.saveLastSearchQuery('');
     add(const LoadProducts());
   }
 
@@ -297,9 +344,34 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       await registerSaleFromStockUpdate(event.productId, event.quantity);
 
-      // Recargar la lista de productos
-      final products = await getAllProducts(NoParams());
-      emit(ProductsLoaded(products: products));
+      // Si hay un estado actual con productos, actualizar solo el producto específico
+      if (currentState is ProductsLoaded) {
+        // Obtener el producto actualizado desde la base de datos
+        final updatedProduct = await getAllProducts(NoParams());
+        final product = updatedProduct.firstWhere(
+          (p) => p.id == event.productId,
+          orElse: () =>
+              currentState.products.firstWhere((p) => p.id == event.productId),
+        );
+
+        final updatedProducts = currentState.products.map((p) {
+          if (p.id == event.productId) {
+            return product;
+          }
+          return p;
+        }).toList();
+
+        emit(
+          ProductsLoaded(
+            products: updatedProducts,
+            searchQuery: currentState.searchQuery,
+          ),
+        );
+      } else {
+        // Si no hay estado actual, recargar desde la base de datos
+        final products = await getAllProducts(NoParams());
+        emit(ProductsLoaded(products: products));
+      }
     } catch (e) {
       final currentState = state;
       if (currentState is ProductsLoaded) {

@@ -25,12 +25,6 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Database
-  try {
-    // Intentar eliminar la base de datos existente para forzar recreación
-    await DatabaseService.deleteDatabase();
-  } catch (e) {
-    // Ignorar errores si la base de datos no existe
-  }
   await DatabaseService.database; // Inicializar la base de datos
 
   // Bloc

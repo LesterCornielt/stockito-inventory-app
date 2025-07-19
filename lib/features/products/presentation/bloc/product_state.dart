@@ -49,21 +49,31 @@ class ProductOperationLoading extends ProductState {
 class ProductCreated extends ProductState {
   final List<Product> products;
   final Product product;
+  final String? searchQuery;
 
-  const ProductCreated({required this.products, required this.product});
+  const ProductCreated({
+    required this.products,
+    required this.product,
+    this.searchQuery,
+  });
 
   @override
-  List<Object?> get props => [products, product];
+  List<Object?> get props => [products, product, searchQuery];
 }
 
 class ProductUpdated extends ProductState {
   final List<Product> products;
   final Product product;
+  final String? searchQuery;
 
-  const ProductUpdated({required this.products, required this.product});
+  const ProductUpdated({
+    required this.products,
+    required this.product,
+    this.searchQuery,
+  });
 
   @override
-  List<Object?> get props => [products, product];
+  List<Object?> get props => [products, product, searchQuery];
 }
 
 class ProductDeleted extends ProductState {

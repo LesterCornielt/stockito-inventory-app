@@ -75,3 +75,7 @@ class RegisterSale extends ProductEvent {
   @override
   List<Object?> get props => [productId, quantity];
 }
+
+class LoadSavedSearch extends ProductEvent {
+  const LoadSavedSearch();
+}

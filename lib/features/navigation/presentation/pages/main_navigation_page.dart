@@ -20,7 +20,9 @@ class MainNavigationPage extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => sl<NavigationBloc>()),
         BlocProvider(
-          create: (_) => sl<ProductBloc>()..add(const LoadProducts()),
+          create: (_) => sl<ProductBloc>()
+            ..add(const LoadProducts())
+            ..add(const LoadSavedSearch()),
         ),
       ],
       child: const _MainNavigationView(),
@@ -148,6 +150,10 @@ class _MainNavigationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
+        // Cargar el estado guardado al inicializar
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.read<NavigationBloc>().add(const LoadSavedNavigation());
+        });
         return Scaffold(
           body: _buildBody(state.currentIndex),
           backgroundColor: Colors.white,

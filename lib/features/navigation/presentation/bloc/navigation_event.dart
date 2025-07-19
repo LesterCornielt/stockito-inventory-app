@@ -15,3 +15,7 @@ class NavigationChanged extends NavigationEvent {
   @override
   List<Object?> get props => [index];
 }
+
+class LoadSavedNavigation extends NavigationEvent {
+  const LoadSavedNavigation();
+}
