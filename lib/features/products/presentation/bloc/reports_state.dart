@@ -38,3 +38,12 @@ class ReportsError extends ReportsState {
   @override
   List<Object?> get props => [message];
 }
+
+class ReportsEditing extends ReportsState {
+  final DailySalesReport report;
+
+  const ReportsEditing(this.report);
+
+  @override
+  List<Object?> get props => [report];
+}

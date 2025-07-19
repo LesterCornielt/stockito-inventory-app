@@ -16,6 +16,7 @@ import '../../features/products/domain/usecases/create_sale.dart';
 import '../../features/products/domain/usecases/get_sales_of_day.dart';
 import '../../features/products/domain/usecases/get_sales_report.dart';
 import '../../features/products/domain/usecases/register_sale_from_stock_update.dart';
+import '../../features/products/domain/usecases/update_sale.dart';
 import '../../features/products/presentation/bloc/product_bloc.dart';
 import '../../features/products/presentation/bloc/reports_bloc.dart';
 import '../../features/navigation/presentation/bloc/navigation_bloc.dart';
@@ -44,7 +45,7 @@ Future<void> init() async {
       registerSaleFromStockUpdate: sl(),
     ),
   );
-  sl.registerFactory(() => ReportsBloc(getSalesReport: sl()));
+  sl.registerFactory(() => ReportsBloc(getSalesReport: sl(), updateSale: sl()));
   sl.registerFactory(() => NavigationBloc());
 
   // Use cases
@@ -62,6 +63,9 @@ Future<void> init() async {
       productRepository: sl(),
       saleRepository: sl(),
     ),
+  );
+  sl.registerLazySingleton(
+    () => UpdateSale(saleRepository: sl(), productRepository: sl()),
   );
 
   // Repository

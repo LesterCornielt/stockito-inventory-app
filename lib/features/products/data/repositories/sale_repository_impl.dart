@@ -25,4 +25,21 @@ class SaleRepositoryImpl implements SaleRepository {
     final sales = await localDataSource.getAllSales();
     return sales.map((e) => e.toEntity()).toList();
   }
+
+  @override
+  Future<Sale?> getSaleById(int saleId) async {
+    final sale = await localDataSource.getSaleById(saleId);
+    return sale?.toEntity();
+  }
+
+  @override
+  Future<void> updateSale(Sale sale) async {
+    final saleModel = SaleModel.fromEntity(sale);
+    await localDataSource.updateSale(saleModel);
+  }
+
+  @override
+  Future<void> deleteSale(int saleId) async {
+    await localDataSource.deleteSale(saleId);
+  }
 }

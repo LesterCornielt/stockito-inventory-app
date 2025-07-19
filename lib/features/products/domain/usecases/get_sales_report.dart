@@ -15,14 +15,34 @@ class SalesReport {
   });
 }
 
+class IndividualSaleReport {
+  final int saleId;
+  final String productName;
+  final int quantity;
+  final double totalAmount;
+  final double pricePerUnit;
+  final DateTime date;
+
+  IndividualSaleReport({
+    required this.saleId,
+    required this.productName,
+    required this.quantity,
+    required this.totalAmount,
+    required this.pricePerUnit,
+    required this.date,
+  });
+}
+
 class DailySalesReport {
   final DateTime date;
   final List<SalesReport> productReports;
+  final List<IndividualSaleReport> individualSales;
   final double totalDailyAmount;
 
   DailySalesReport({
     required this.date,
     required this.productReports,
+    required this.individualSales,
     required this.totalDailyAmount,
   });
 }
@@ -46,6 +66,7 @@ class GetSalesReport {
 
     // Crear reportes por producto
     final List<SalesReport> productReports = [];
+    final List<IndividualSaleReport> individualSales = [];
     double totalDailyAmount = 0;
 
     for (final entry in salesByProduct.entries) {
@@ -73,9 +94,24 @@ class GetSalesReport {
       totalDailyAmount += totalAmount;
     }
 
+    // Crear lista de ventas individuales
+    for (final sale in sales) {
+      individualSales.add(
+        IndividualSaleReport(
+          saleId: sale.id!,
+          productName: sale.productName,
+          quantity: sale.quantity,
+          totalAmount: sale.totalAmount,
+          pricePerUnit: sale.pricePerUnit,
+          date: sale.date,
+        ),
+      );
+    }
+
     return DailySalesReport(
       date: day,
       productReports: productReports,
+      individualSales: individualSales,
       totalDailyAmount: totalDailyAmount,
     );
   }

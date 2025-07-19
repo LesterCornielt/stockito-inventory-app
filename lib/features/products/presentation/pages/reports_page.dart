@@ -19,8 +19,16 @@ class ReportsPage extends StatelessWidget {
   }
 }
 
-class _ReportsView extends StatelessWidget {
+class _ReportsView extends StatefulWidget {
   const _ReportsView();
+
+  @override
+  State<_ReportsView> createState() => _ReportsViewState();
+}
+
+class _ReportsViewState extends State<_ReportsView> {
+  int? editingIndex;
+  final TextEditingController editingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -320,11 +328,32 @@ class _ReportsView extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              '${product.totalQuantity}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
+            child: editingIndex == index
+                ? TextField(
+                    controller: editingController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    onSubmitted: (value) => _finishEditing(value),
+                  )
+                : GestureDetector(
+                    onTap: () => _startEditing(index, product),
+                    child: Text(
+                      '${product.totalQuantity}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
           ),
           Expanded(
             child: Text(
@@ -422,5 +451,54 @@ class _ReportsView extends StatelessWidget {
     if (picked != null) {
       context.read<ReportsBloc>().add(LoadDailyReport(picked));
     }
+  }
+
+  void _startEditing(int index, SalesReport product) {
+    setState(() {
+      editingIndex = index;
+      editingController.text = product.totalQuantity.toString();
+    });
+    // Enfocar el campo de texto
+    Future.delayed(const Duration(milliseconds: 100), () {
+      editingController.selection = TextSelection.fromPosition(
+        TextPosition(offset: editingController.text.length),
+      );
+    });
+  }
+
+  void _finishEditing(String value) {
+    if (editingIndex == null) return;
+
+    final newQuantity = int.tryParse(value);
+    if (newQuantity != null && newQuantity >= 0) {
+      // Obtener el estado actual para acceder al reporte
+      final state = context.read<ReportsBloc>().state;
+      if (state is ReportsLoaded) {
+        // Encontrar el producto que se está editando
+        final product = state.report.productReports[editingIndex!];
+
+        context.read<ReportsBloc>().add(
+          EditProductSales(
+            productName: product.productName,
+            newQuantity: newQuantity,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor ingrese una cantidad válida')),
+      );
+    }
+
+    setState(() {
+      editingIndex = null;
+      editingController.clear();
+    });
+  }
+
+  @override
+  void dispose() {
+    editingController.dispose();
+    super.dispose();
   }
 }

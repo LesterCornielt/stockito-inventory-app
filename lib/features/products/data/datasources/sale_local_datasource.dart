@@ -6,6 +6,9 @@ abstract class SaleLocalDataSource {
   Future<int> createSale(SaleModel sale);
   Future<List<SaleModel>> getSalesOfDay(DateTime day);
   Future<List<SaleModel>> getAllSales();
+  Future<SaleModel?> getSaleById(int saleId);
+  Future<void> updateSale(SaleModel sale);
+  Future<void> deleteSale(int saleId);
 }
 
 class SaleLocalDataSourceImpl implements SaleLocalDataSource {
@@ -41,5 +44,34 @@ class SaleLocalDataSourceImpl implements SaleLocalDataSource {
       orderBy: 'date DESC',
     );
     return List.generate(maps.length, (i) => SaleModel.fromMap(maps[i]));
+  }
+
+  @override
+  Future<SaleModel?> getSaleById(int saleId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'sales',
+      where: 'id = ?',
+      whereArgs: [saleId],
+    );
+    if (maps.isEmpty) return null;
+    return SaleModel.fromMap(maps.first);
+  }
+
+  @override
+  Future<void> updateSale(SaleModel sale) async {
+    final db = await database;
+    await db.update(
+      'sales',
+      sale.toMap(),
+      where: 'id = ?',
+      whereArgs: [sale.id],
+    );
+  }
+
+  @override
+  Future<void> deleteSale(int saleId) async {
+    final db = await database;
+    await db.delete('sales', where: 'id = ?', whereArgs: [saleId]);
   }
 }
