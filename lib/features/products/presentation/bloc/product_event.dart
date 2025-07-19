@@ -65,3 +65,13 @@ class ClearSearch extends ProductEvent {
 class PopulateSampleData extends ProductEvent {
   const PopulateSampleData();
 }
+
+class RegisterSale extends ProductEvent {
+  final int productId;
+  final int quantity;
+
+  const RegisterSale({required this.productId, required this.quantity});
+
+  @override
+  List<Object?> get props => [productId, quantity];
+}

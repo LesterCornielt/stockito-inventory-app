@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import '../models/product_model.dart';
 import '../../../../core/utils/sample_data_generator.dart';
+import '../../../../core/database/database_service.dart';
 
 abstract class ProductLocalDataSource {
   Future<List<ProductModel>> getAllProducts();
@@ -14,32 +14,8 @@ abstract class ProductLocalDataSource {
 }
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
-  static Database? _database;
-
   Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
-
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'stockito.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE products(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT NOT NULL,
-        price REAL NOT NULL,
-        stock INTEGER NOT NULL,
-        barcode TEXT,
-        created_at TEXT NOT NULL,
-        updated_at TEXT NOT NULL
-      )
-    ''');
+    return await DatabaseService.database;
   }
 
   @override

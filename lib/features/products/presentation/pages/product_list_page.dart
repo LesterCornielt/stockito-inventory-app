@@ -106,12 +106,11 @@ class _ProductListView extends StatelessWidget {
                         IconButton(
                           onPressed: product.stock > 0
                               ? () {
-                                  final updatedProduct = product.copyWith(
-                                    stock: product.stock - 1,
-                                    updatedAt: DateTime.now(),
-                                  );
                                   context.read<ProductBloc>().add(
-                                    UpdateProduct(updatedProduct),
+                                    RegisterSale(
+                                      productId: product.id!,
+                                      quantity: 1,
+                                    ),
                                   );
                                 }
                               : null,

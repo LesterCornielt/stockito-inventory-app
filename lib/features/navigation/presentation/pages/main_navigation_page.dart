@@ -5,8 +5,10 @@ import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../products/presentation/pages/product_list_page.dart';
+import '../../../products/presentation/pages/reports_page.dart';
 import '../../../products/presentation/bloc/product_bloc.dart';
 import '../../../products/presentation/bloc/product_event.dart';
+import '../../../products/presentation/bloc/reports_bloc.dart';
 import '../../../lists/presentation/pages/lists_page.dart';
 
 class MainNavigationPage extends StatelessWidget {
@@ -193,7 +195,10 @@ class _MainNavigationView extends StatelessWidget {
       case 1:
         return const ListsPage();
       case 2:
-        return const _ReportsPage();
+        return BlocProvider(
+          create: (_) => sl<ReportsBloc>(),
+          child: const ReportsPage(),
+        );
       case 3:
         return const _SettingsPage();
       default:
@@ -295,24 +300,6 @@ class _NavBarItemData {
 }
 
 // Placeholder pages - these will be implemented later
-
-class _ReportsPage extends StatelessWidget {
-  const _ReportsPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text(
-            'Página de Reportes',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _SettingsPage extends StatelessWidget {
   const _SettingsPage();

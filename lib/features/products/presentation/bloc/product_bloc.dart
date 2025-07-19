@@ -7,6 +7,7 @@ import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/search_products.dart' as search_use_case;
 import '../../domain/usecases/update_product.dart' as update_use_case;
 import '../../domain/usecases/populate_sample_data.dart' as populate_use_case;
+import '../../domain/usecases/register_sale_from_stock_update.dart';
 import 'product_event.dart';
 import 'product_state.dart';
 
@@ -17,6 +18,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final delete_use_case.DeleteProduct deleteProduct;
   final search_use_case.SearchProducts searchProducts;
   final populate_use_case.PopulateSampleData populateSampleData;
+  final RegisterSaleFromStockUpdate registerSaleFromStockUpdate;
 
   ProductBloc({
     required this.getAllProducts,
@@ -25,6 +27,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     required this.deleteProduct,
     required this.searchProducts,
     required this.populateSampleData,
+    required this.registerSaleFromStockUpdate,
   }) : super(const ProductInitial()) {
     on<LoadProducts>(_onLoadProducts);
     on<SearchProducts>(_onSearchProducts);
@@ -33,6 +36,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<DeleteProduct>(_onDeleteProduct);
     on<ClearSearch>(_onClearSearch);
     on<PopulateSampleData>(_onPopulateSampleData);
+    on<RegisterSale>(_onRegisterSale);
   }
 
   Future<void> _onLoadProducts(
@@ -260,6 +264,38 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
 
       await populateSampleData();
+
+      // Recargar la lista de productos
+      final products = await getAllProducts(NoParams());
+      emit(ProductsLoaded(products: products));
+    } catch (e) {
+      final currentState = state;
+      if (currentState is ProductsLoaded) {
+        emit(
+          ProductError(message: e.toString(), products: currentState.products),
+        );
+      } else {
+        emit(ProductError(message: e.toString()));
+      }
+    }
+  }
+
+  Future<void> _onRegisterSale(
+    RegisterSale event,
+    Emitter<ProductState> emit,
+  ) async {
+    try {
+      final currentState = state;
+      if (currentState is ProductsLoaded) {
+        emit(
+          ProductOperationLoading(
+            products: currentState.products,
+            operation: 'Registrando venta...',
+          ),
+        );
+      }
+
+      await registerSaleFromStockUpdate(event.productId, event.quantity);
 
       // Recargar la lista de productos
       final products = await getAllProducts(NoParams());
