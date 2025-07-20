@@ -49,8 +49,8 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'products',
-      where: 'name LIKE ? OR description LIKE ?',
-      whereArgs: ['%$query%', '%$query%'],
+      where: 'name LIKE ?',
+      whereArgs: ['%$query%'],
     );
     return List.generate(maps.length, (i) {
       return ProductModel.fromMap(maps[i]);

@@ -23,21 +23,17 @@ class SearchProducts extends ProductEvent {
 
 class CreateProduct extends ProductEvent {
   final String name;
-  final String description;
   final double price;
   final int stock;
-  final String? barcode;
 
   const CreateProduct({
     required this.name,
-    required this.description,
     required this.price,
     required this.stock,
-    this.barcode,
   });
 
   @override
-  List<Object?> get props => [name, description, price, stock, barcode];
+  List<Object?> get props => [name, price, stock];
 }
 
 class UpdateProduct extends ProductEvent {

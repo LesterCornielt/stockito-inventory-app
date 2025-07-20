@@ -142,12 +142,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                 }
 
                 productBloc.add(
-                  CreateProduct(
-                    name: name,
-                    description: '', // Descripción vacía por defecto
-                    price: price,
-                    stock: stock,
-                  ),
+                  CreateProduct(name: name, price: price, stock: stock),
                 );
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(

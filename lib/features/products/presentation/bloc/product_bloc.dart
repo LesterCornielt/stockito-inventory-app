@@ -129,10 +129,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final now = DateTime.now();
       final product = Product(
         name: event.name,
-        description: event.description,
         price: event.price,
         stock: event.stock,
-        barcode: event.barcode,
         createdAt: now,
         updatedAt: now,
       );

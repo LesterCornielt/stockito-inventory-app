@@ -4,10 +4,8 @@ class ProductModel extends Product {
   const ProductModel({
     super.id,
     required super.name,
-    required super.description,
     required super.price,
     required super.stock,
-    super.barcode,
     required super.createdAt,
     required super.updatedAt,
   });
@@ -16,10 +14,8 @@ class ProductModel extends Product {
     return ProductModel(
       id: json['id'] as int?,
       name: json['name'] as String,
-      description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
       stock: json['stock'] as int,
-      barcode: json['barcode'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -29,10 +25,8 @@ class ProductModel extends Product {
     return ProductModel(
       id: product.id,
       name: product.name,
-      description: product.description,
       price: product.price,
       stock: product.stock,
-      barcode: product.barcode,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
     );
@@ -42,10 +36,8 @@ class ProductModel extends Product {
     return {
       'id': id,
       'name': name,
-      'description': description,
       'price': price,
       'stock': stock,
-      'barcode': barcode,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
@@ -55,10 +47,8 @@ class ProductModel extends Product {
     return {
       'id': id,
       'name': name,
-      'description': description,
       'price': price,
       'stock': stock,
-      'barcode': barcode,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
@@ -68,10 +58,8 @@ class ProductModel extends Product {
     return ProductModel(
       id: map['id'] as int?,
       name: map['name'] as String,
-      description: map['description'] as String,
       price: (map['price'] as num).toDouble(),
       stock: map['stock'] as int,
-      barcode: map['barcode'] as String?,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
     );
@@ -81,10 +69,8 @@ class ProductModel extends Product {
     return Product(
       id: id,
       name: name,
-      description: description,
       price: price,
       stock: stock,
-      barcode: barcode,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 class DatabaseService {
   static Database? _database;
-  static const int _version = 2; // Incrementar versión para forzar migración
+  static const int _version = 3; // Incrementar versión para forzar migración
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -27,10 +27,8 @@ class DatabaseService {
       CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        description TEXT NOT NULL,
         price REAL NOT NULL,
         stock INTEGER NOT NULL,
-        barcode TEXT,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
       )
@@ -69,6 +67,31 @@ class DatabaseService {
           date TEXT NOT NULL
         )
       ''');
+    }
+
+    if (oldVersion < 3) {
+      // Eliminar columnas description y barcode de la tabla products
+      // Crear tabla temporal con el nuevo esquema
+      await db.execute('''
+        CREATE TABLE products_new(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          price REAL NOT NULL,
+          stock INTEGER NOT NULL,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      ''');
+
+      // Copiar datos existentes (excluyendo description y barcode)
+      await db.execute('''
+        INSERT INTO products_new (id, name, price, stock, created_at, updated_at)
+        SELECT id, name, price, stock, created_at, updated_at FROM products
+      ''');
+
+      // Eliminar tabla antigua y renombrar la nueva
+      await db.execute('DROP TABLE products');
+      await db.execute('ALTER TABLE products_new RENAME TO products');
     }
   }
 
