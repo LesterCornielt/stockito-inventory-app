@@ -1,4 +1,3 @@
-import '../entities/sale.dart';
 import '../repositories/sale_repository.dart';
 import '../repositories/product_repository.dart';
 

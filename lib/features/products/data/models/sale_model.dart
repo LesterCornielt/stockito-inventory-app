@@ -2,22 +2,14 @@ import '../../domain/entities/sale.dart';
 
 class SaleModel extends Sale {
   SaleModel({
-    int? id,
-    required int productId,
-    required String productName,
-    required int quantity,
-    required double pricePerUnit,
-    required double totalAmount,
-    required DateTime date,
-  }) : super(
-         id: id,
-         productId: productId,
-         productName: productName,
-         quantity: quantity,
-         pricePerUnit: pricePerUnit,
-         totalAmount: totalAmount,
-         date: date,
-       );
+    super.id,
+    required super.productId,
+    required super.productName,
+    required super.quantity,
+    required super.pricePerUnit,
+    required super.totalAmount,
+    required super.date,
+  });
 
   factory SaleModel.fromMap(Map<String, dynamic> map) {
     return SaleModel(

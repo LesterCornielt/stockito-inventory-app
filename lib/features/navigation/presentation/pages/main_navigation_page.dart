@@ -199,12 +199,12 @@ class _MainNavigationView extends StatelessWidget {
       case 0:
         return const ProductListPage();
       case 1:
-        return const ListsPage();
-      case 2:
         return BlocProvider(
           create: (_) => sl<ReportsBloc>(),
           child: const ReportsPage(),
         );
+      case 2:
+        return const ListsPage();
       case 3:
         return const _SettingsPage();
       default:
@@ -220,8 +220,8 @@ class _CustomBottomNavBar extends StatelessWidget {
 
   static const _items = [
     _NavBarItemData(Icons.inventory, 'Productos'),
-    _NavBarItemData(Icons.list, 'Listas'),
     _NavBarItemData(Icons.analytics, 'Reportes'),
+    _NavBarItemData(Icons.list, 'Listas'),
     _NavBarItemData(Icons.settings, 'Opciones'),
   ];
 
