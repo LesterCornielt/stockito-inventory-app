@@ -30,8 +30,27 @@ class MainNavigationPage extends StatelessWidget {
   }
 }
 
-class _MainNavigationView extends StatelessWidget {
+class _MainNavigationView extends StatefulWidget {
   const _MainNavigationView();
+
+  @override
+  State<_MainNavigationView> createState() => _MainNavigationViewState();
+}
+
+class _MainNavigationViewState extends State<_MainNavigationView> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   void _showAddProductDialog(BuildContext context, ProductBloc productBloc) {
     final nameController = TextEditingController();
@@ -154,8 +173,33 @@ class _MainNavigationView extends StatelessWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           context.read<NavigationBloc>().add(const LoadSavedNavigation());
         });
+
+        // Sincronizar el PageController con el estado actual
+        if (_pageController.hasClients &&
+            _pageController.page?.round() != state.currentIndex) {
+          _pageController.animateToPage(
+            state.currentIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+
         return Scaffold(
-          body: _buildBody(state.currentIndex),
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              context.read<NavigationBloc>().add(NavigationChanged(index));
+            },
+            children: [
+              const ProductListPage(),
+              BlocProvider(
+                create: (_) => sl<ReportsBloc>(),
+                child: const ReportsPage(),
+              ),
+              const ListsPage(),
+              const _SettingsPage(),
+            ],
+          ),
           backgroundColor: Colors.white,
           floatingActionButton: state.currentIndex == 0
               ? PhysicalModel(
@@ -192,24 +236,6 @@ class _MainNavigationView extends StatelessWidget {
         );
       },
     );
-  }
-
-  Widget _buildBody(int currentIndex) {
-    switch (currentIndex) {
-      case 0:
-        return const ProductListPage();
-      case 1:
-        return BlocProvider(
-          create: (_) => sl<ReportsBloc>(),
-          child: const ReportsPage(),
-        );
-      case 2:
-        return const ListsPage();
-      case 3:
-        return const _SettingsPage();
-      default:
-        return const ProductListPage();
-    }
   }
 }
 
