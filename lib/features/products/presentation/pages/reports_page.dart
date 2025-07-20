@@ -190,7 +190,7 @@ class _ReportsViewState extends State<_ReportsView> {
               Expanded(
                 child: _buildSummaryCard(
                   'Total vendido',
-                  '\$${report.totalDailyAmount}',
+                  '${report.totalDailyAmount} CUP',
                   Icons.attach_money,
                   isMoney: true,
                 ),
@@ -357,14 +357,14 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
           Expanded(
             child: Text(
-              '\$${product.pricePerUnit}',
+              '${product.pricePerUnit} CUP',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: Text(
-              '\$${product.totalAmount}',
+              '${product.totalAmount} CUP',
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

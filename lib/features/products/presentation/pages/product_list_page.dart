@@ -146,7 +146,7 @@ class _ProductListView extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'CUP ${product.price}',
+                      '${product.price} CUP',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -195,7 +195,7 @@ class _ProductListView extends StatelessWidget {
                 TextField(
                   controller: priceController,
                   decoration: const InputDecoration(
-                    labelText: 'Precio (CUP)',
+                    labelText: 'Precio CUP',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,

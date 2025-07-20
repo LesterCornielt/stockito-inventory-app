@@ -77,7 +77,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                 TextField(
                   controller: priceController,
                   decoration: const InputDecoration(
-                    labelText: 'Precio (CUP)',
+                    labelText: 'Precio CUP',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
