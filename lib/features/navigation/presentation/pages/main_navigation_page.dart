@@ -220,7 +220,7 @@ class _CustomBottomNavBar extends StatelessWidget {
 
   static const _items = [
     _NavBarItemData(Icons.inventory, 'Productos'),
-    _NavBarItemData(Icons.analytics, 'Reportes'),
+    _NavBarItemData(Icons.analytics, 'Ventas'),
     _NavBarItemData(Icons.list, 'Listas'),
     _NavBarItemData(Icons.settings, 'Opciones'),
   ];
