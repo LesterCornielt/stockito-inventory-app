@@ -17,8 +17,8 @@ class SaleModel extends Sale {
       productId: map['product_id'] as int,
       productName: map['product_name'] as String,
       quantity: map['quantity'] as int,
-      pricePerUnit: map['price_per_unit'] as double,
-      totalAmount: map['total_amount'] as double,
+      pricePerUnit: (map['price_per_unit'] as num).toInt(),
+      totalAmount: (map['total_amount'] as num).toInt(),
       date: DateTime.parse(map['date'] as String),
     );
   }

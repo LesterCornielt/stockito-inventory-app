@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 class DatabaseService {
   static Database? _database;
-  static const int _version = 3; // Incrementar versión para forzar migración
+  static const int _version = 4; // Incrementar versión para forzar migración
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -27,7 +27,7 @@ class DatabaseService {
       CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        price REAL NOT NULL,
+        price INTEGER NOT NULL,
         stock INTEGER NOT NULL,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
@@ -41,8 +41,8 @@ class DatabaseService {
         product_id INTEGER NOT NULL,
         product_name TEXT NOT NULL,
         quantity INTEGER NOT NULL,
-        price_per_unit REAL NOT NULL,
-        total_amount REAL NOT NULL,
+        price_per_unit INTEGER NOT NULL,
+        total_amount INTEGER NOT NULL,
         date TEXT NOT NULL
       )
     ''');
@@ -53,45 +53,53 @@ class DatabaseService {
     int oldVersion,
     int newVersion,
   ) async {
-    // Manejar migraciones aquí
-    if (oldVersion < 2) {
-      // Agregar tabla de ventas si no existe
-      await db.execute('''
-        CREATE TABLE IF NOT EXISTS sales(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          product_id INTEGER NOT NULL,
-          product_name TEXT NOT NULL,
-          quantity INTEGER NOT NULL,
-          price_per_unit REAL NOT NULL,
-          total_amount REAL NOT NULL,
-          date TEXT NOT NULL
-        )
-      ''');
-    }
-
-    if (oldVersion < 3) {
-      // Eliminar columnas description y barcode de la tabla products
-      // Crear tabla temporal con el nuevo esquema
+    if (oldVersion < 4) {
+      // Migrar la columna price de REAL a INTEGER
       await db.execute('''
         CREATE TABLE products_new(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          price REAL NOT NULL,
+          price INTEGER NOT NULL,
           stock INTEGER NOT NULL,
           created_at TEXT NOT NULL,
           updated_at TEXT NOT NULL
         )
       ''');
 
-      // Copiar datos existentes (excluyendo description y barcode)
+      // Copiar datos existentes, convirtiendo precios a enteros
       await db.execute('''
         INSERT INTO products_new (id, name, price, stock, created_at, updated_at)
-        SELECT id, name, price, stock, created_at, updated_at FROM products
+        SELECT id, name, CAST(price AS INTEGER), stock, created_at, updated_at
+        FROM products
       ''');
 
       // Eliminar tabla antigua y renombrar la nueva
       await db.execute('DROP TABLE products');
       await db.execute('ALTER TABLE products_new RENAME TO products');
+
+      // Migrar la tabla de ventas
+      await db.execute('''
+        CREATE TABLE sales_new(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          product_id INTEGER NOT NULL,
+          product_name TEXT NOT NULL,
+          quantity INTEGER NOT NULL,
+          price_per_unit INTEGER NOT NULL,
+          total_amount INTEGER NOT NULL,
+          date TEXT NOT NULL
+        )
+      ''');
+
+      // Copiar datos existentes, convirtiendo precios a enteros
+      await db.execute('''
+        INSERT INTO sales_new (id, product_id, product_name, quantity, price_per_unit, total_amount, date)
+        SELECT id, product_id, product_name, quantity, CAST(price_per_unit AS INTEGER), CAST(total_amount AS INTEGER), date
+        FROM sales
+      ''');
+
+      // Eliminar tabla antigua y renombrar la nueva
+      await db.execute('DROP TABLE sales');
+      await db.execute('ALTER TABLE sales_new RENAME TO sales');
     }
   }
 

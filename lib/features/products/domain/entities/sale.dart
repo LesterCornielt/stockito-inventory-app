@@ -3,8 +3,8 @@ class Sale {
   final int productId;
   final String productName;
   final int quantity;
-  final double pricePerUnit;
-  final double totalAmount;
+  final int pricePerUnit;
+  final int totalAmount;
   final DateTime date;
 
   Sale({
@@ -22,8 +22,8 @@ class Sale {
     int? productId,
     String? productName,
     int? quantity,
-    double? pricePerUnit,
-    double? totalAmount,
+    int? pricePerUnit,
+    int? totalAmount,
     DateTime? date,
   }) {
     return Sale(

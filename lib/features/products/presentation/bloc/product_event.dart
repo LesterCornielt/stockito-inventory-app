@@ -23,7 +23,7 @@ class SearchProducts extends ProductEvent {
 
 class CreateProduct extends ProductEvent {
   final String name;
-  final double price;
+  final int price;
   final int stock;
 
   const CreateProduct({

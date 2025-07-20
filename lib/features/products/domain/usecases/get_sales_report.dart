@@ -4,8 +4,8 @@ import '../repositories/sale_repository.dart';
 class SalesReport {
   final String productName;
   final int totalQuantity;
-  final double totalAmount;
-  final double pricePerUnit;
+  final int totalAmount;
+  final int pricePerUnit;
 
   SalesReport({
     required this.productName,
@@ -19,8 +19,8 @@ class IndividualSaleReport {
   final int saleId;
   final String productName;
   final int quantity;
-  final double totalAmount;
-  final double pricePerUnit;
+  final int totalAmount;
+  final int pricePerUnit;
   final DateTime date;
 
   IndividualSaleReport({
@@ -37,7 +37,7 @@ class DailySalesReport {
   final DateTime date;
   final List<SalesReport> productReports;
   final List<IndividualSaleReport> individualSales;
-  final double totalDailyAmount;
+  final int totalDailyAmount;
 
   DailySalesReport({
     required this.date,
@@ -67,7 +67,7 @@ class GetSalesReport {
     // Crear reportes por producto
     final List<SalesReport> productReports = [];
     final List<IndividualSaleReport> individualSales = [];
-    double totalDailyAmount = 0;
+    int totalDailyAmount = 0;
 
     for (final entry in salesByProduct.entries) {
       final productSales = entry.value;
@@ -75,7 +75,7 @@ class GetSalesReport {
         0,
         (sum, sale) => sum + sale.quantity,
       );
-      final totalAmount = productSales.fold<double>(
+      final totalAmount = productSales.fold<int>(
         0,
         (sum, sale) => sum + sale.totalAmount,
       );

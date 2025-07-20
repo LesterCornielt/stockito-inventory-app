@@ -146,7 +146,7 @@ class _ProductListView extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'CUP ${product.price.toStringAsFixed(2)}',
+                      'CUP ${product.price}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -220,7 +220,7 @@ class _ProductListView extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 final newName = nameController.text.trim();
-                final newPrice = double.tryParse(priceController.text);
+                final newPrice = int.tryParse(priceController.text);
                 final newStock = int.tryParse(stockController.text);
 
                 if (newName.isEmpty) {
@@ -239,7 +239,7 @@ class _ProductListView extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
-                        'El precio debe ser un número válido mayor o igual a 0',
+                        'El precio debe ser un número entero válido mayor o igual a 0',
                       ),
                       backgroundColor: Colors.red,
                     ),

@@ -102,7 +102,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
             ElevatedButton(
               onPressed: () {
                 final name = nameController.text.trim();
-                final price = double.tryParse(priceController.text);
+                final price = int.tryParse(priceController.text);
                 final stock = int.tryParse(stockController.text);
 
                 if (name.isEmpty) {
@@ -121,7 +121,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
-                        'El precio debe ser un número válido mayor o igual a 0',
+                        'El precio debe ser un número entero válido mayor o igual a 0',
                       ),
                       backgroundColor: Colors.red,
                     ),

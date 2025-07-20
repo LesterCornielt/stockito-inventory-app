@@ -14,7 +14,7 @@ class ProductModel extends Product {
     return ProductModel(
       id: json['id'] as int?,
       name: json['name'] as String,
-      price: (json['price'] as num).toDouble(),
+      price: (json['price'] as num).toInt(),
       stock: json['stock'] as int,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
@@ -58,7 +58,7 @@ class ProductModel extends Product {
     return ProductModel(
       id: map['id'] as int?,
       name: map['name'] as String,
-      price: (map['price'] as num).toDouble(),
+      price: (map['price'] as num).toInt(),
       stock: map['stock'] as int,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
