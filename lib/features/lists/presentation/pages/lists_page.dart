@@ -55,25 +55,25 @@ class ListsPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: PhysicalModel(
-        color: Colors.transparent,
-        elevation: 12,
-        shadowColor: Colors.black26,
-        shape: BoxShape.circle,
-        child: SizedBox(
-          width: 72,
-          height: 72,
-          child: FloatingActionButton(
-            onPressed: () {
-              // TODO: Implementar creación de nueva lista
-            },
-            backgroundColor: const Color(0xFF1976D2),
-            shape: const CircleBorder(),
-            elevation: 0,
-            child: const Icon(Icons.add, color: Colors.white, size: 40),
-          ),
-        ),
-      ),
+      // floatingActionButton: PhysicalModel(
+      //   color: Colors.transparent,
+      //   elevation: 12,
+      //   shadowColor: Colors.black26,
+      //   shape: BoxShape.circle,
+      //   child: SizedBox(
+      //     width: 72,
+      //     height: 72,
+      //     child: FloatingActionButton(
+      //       onPressed: () {
+      //         // TODO: Implementar creación de nueva lista
+      //       },
+      //       backgroundColor: const Color(0xFF1976D2),
+      //       shape: const CircleBorder(),
+      //       elevation: 0,
+      //       child: const Icon(Icons.add, color: Colors.white, size: 40),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
