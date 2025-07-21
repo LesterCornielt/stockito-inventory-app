@@ -193,6 +193,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             return product;
           }).toList();
 
+          // FIX: Si hay búsqueda activa, reaplicar búsqueda
+          if (currentState.searchQuery != null &&
+              currentState.searchQuery!.isNotEmpty) {
+            add(SearchProducts(currentState.searchQuery!));
+            return;
+          }
+
           emit(
             ProductUpdated(
               products: updatedProducts,
