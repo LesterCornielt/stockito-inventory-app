@@ -12,9 +12,6 @@ class ListsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Barra de búsqueda en la parte superior
-              _SearchBar(),
-              const SizedBox(height: 24),
               // Pill para el título 'Listas'
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -77,35 +74,6 @@ class ListsPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SearchBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'Buscar listas',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: 3,
-          ),
-        ),
-        prefixIcon: const Icon(Icons.search),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-      ),
-      onChanged: (value) {
-        // TODO: Implementar búsqueda de listas
-      },
     );
   }
 }
