@@ -5,6 +5,7 @@ class PersistenceService {
   static const String _lastSearchQueryKey = 'last_search_query';
   static const String _lastReportDateKey = 'last_report_date';
   static const String _isFirstLaunchKey = 'is_first_launch';
+  static const String _showSampleDialogKey = 'show_sample_dialog';
 
   static Future<void> saveNavigationIndex(int index) async {
     final prefs = await SharedPreferences.getInstance();
@@ -47,6 +48,17 @@ class PersistenceService {
       await prefs.setBool(_isFirstLaunchKey, false);
     }
     return isFirst;
+  }
+
+  static Future<void> setShowSampleDialog(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_showSampleDialogKey, value);
+  }
+
+  static Future<bool> getShowSampleDialog() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Por defecto, mostrar el cuadro (true)
+    return prefs.getBool(_showSampleDialogKey) ?? true;
   }
 
   static Future<void> clearAllData() async {
