@@ -18,7 +18,10 @@ class _ProductListView extends StatelessWidget {
   const _ProductListView();
 
   Widget _buildProductList(List<Product> products, BuildContext context) {
-    if (products.isEmpty) {
+    // Ordenar productos alfabéticamente por nombre (A-Z)
+    final sortedProducts = List<Product>.from(products)
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    if (sortedProducts.isEmpty) {
       return const Center(
         child: Text(
           'No hay productos registrados',
@@ -27,10 +30,10 @@ class _ProductListView extends StatelessWidget {
       );
     }
     return ListView.separated(
-      itemCount: products.length,
+      itemCount: sortedProducts.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final product = products[index];
+        final product = sortedProducts[index];
         return Card(
           elevation: 2,
           child: Padding(
