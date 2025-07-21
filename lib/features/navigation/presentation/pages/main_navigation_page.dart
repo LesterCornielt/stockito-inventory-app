@@ -184,6 +184,10 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
             controller: _pageController,
             onPageChanged: (index) {
               context.read<NavigationBloc>().add(NavigationChanged(index));
+              if (index == 0) {
+                // Limpiar búsqueda al volver a la página de productos
+                context.read<ProductBloc>().add(const ClearSearch());
+              }
             },
             children: [
               const ProductListPage(),
@@ -226,6 +230,10 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
             currentIndex: state.currentIndex,
             onTap: (index) {
               context.read<NavigationBloc>().add(NavigationChanged(index));
+              if (index == 0) {
+                // Limpiar búsqueda al volver a la página de productos
+                context.read<ProductBloc>().add(const ClearSearch());
+              }
             },
           ),
         );
