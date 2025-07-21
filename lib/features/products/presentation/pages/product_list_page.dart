@@ -181,105 +181,109 @@ class _ProductListView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Editar Producto'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre',
-                    border: OutlineInputBorder(),
-                  ),
+        String? errorMessage;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Editar Producto'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (errorMessage != null) ...[
+                      Text(
+                        errorMessage!,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nombre',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: priceController,
+                      decoration: const InputDecoration(
+                        labelText: 'Precio CUP',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: stockController,
+                      decoration: const InputDecoration(
+                        labelText: 'Cantidad',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: priceController,
-                  decoration: const InputDecoration(
-                    labelText: 'Precio CUP',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancelar'),
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: stockController,
-                  decoration: const InputDecoration(
-                    labelText: 'Cantidad',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
+                ElevatedButton(
+                  onPressed: () {
+                    final newName = nameController.text.trim();
+                    final newPrice = int.tryParse(priceController.text);
+                    final newStock = int.tryParse(stockController.text);
+
+                    if (newName.isEmpty) {
+                      setState(() {
+                        errorMessage =
+                            'El nombre del producto no puede estar vacío';
+                      });
+                      return;
+                    }
+
+                    if (newPrice == null || newPrice < 1) {
+                      setState(() {
+                        errorMessage =
+                            'El precio debe ser mayor o igual a 1 CUP';
+                      });
+                      return;
+                    }
+
+                    if (newStock == null || newStock < 1) {
+                      setState(() {
+                        errorMessage =
+                            'La cantidad debe ser mayor o igual a 1 unidad';
+                      });
+                      return;
+                    }
+
+                    final updatedProduct = product.copyWith(
+                      name: newName,
+                      price: newPrice,
+                      stock: newStock,
+                      updatedAt: DateTime.now(),
+                    );
+                    bloc.add(UpdateProduct(updatedProduct));
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Producto actualizado exitosamente'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  },
+                  child: const Text('Guardar'),
                 ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final newName = nameController.text.trim();
-                final newPrice = int.tryParse(priceController.text);
-                final newStock = int.tryParse(stockController.text);
-
-                if (newName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'El nombre del producto no puede estar vacío',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (newPrice == null || newPrice < 0) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'El precio debe ser un número entero válido mayor o igual a 0',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (newStock == null || newStock < 0) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'La cantidad debe ser un número entero mayor o igual a 0',
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                final updatedProduct = product.copyWith(
-                  name: newName,
-                  price: newPrice,
-                  stock: newStock,
-                  updatedAt: DateTime.now(),
-                );
-                bloc.add(UpdateProduct(updatedProduct));
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Producto actualizado exitosamente'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              },
-              child: const Text('Guardar'),
-            ),
-          ],
+            );
+          },
         );
       },
     );
