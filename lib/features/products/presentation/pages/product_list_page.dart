@@ -104,6 +104,8 @@ class _ProductListView extends StatelessWidget {
                           return _buildProductList(state.products, context);
                         } else if (state is ProductError) {
                           return Center(child: Text(state.message));
+                        } else if (state is ProductDeleted) {
+                          return _buildProductList(state.products, context);
                         }
                         return const SizedBox.shrink();
                       },
