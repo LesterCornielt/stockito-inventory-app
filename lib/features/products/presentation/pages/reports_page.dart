@@ -5,6 +5,10 @@ import '../bloc/reports_bloc.dart';
 import '../bloc/reports_event.dart';
 import '../bloc/reports_state.dart';
 import '../../domain/usecases/get_sales_report.dart';
+import '../bloc/product_bloc.dart';
+import '../bloc/product_event.dart';
+import '../bloc/product_state.dart';
+import '../../domain/entities/product.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});
@@ -28,7 +32,9 @@ class _ReportsView extends StatefulWidget {
 
 class _ReportsViewState extends State<_ReportsView> {
   int? editingIndex;
-  final TextEditingController editingController = TextEditingController();
+  String? editingField; // 'name' o 'quantity'
+  final TextEditingController quantityController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -322,16 +328,38 @@ class _ReportsViewState extends State<_ReportsView> {
         children: [
           Expanded(
             flex: 3,
-            child: Text(
-              product.productName,
-              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-            ),
+            child: editingIndex == index && editingField == 'name'
+                ? TextField(
+                    controller: nameController,
+                    autofocus: true,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    onSubmitted: (value) => _finishEditingName(value),
+                  )
+                : GestureDetector(
+                    onTap: () => _startEditing(index, product, 'name'),
+                    child: Text(
+                      product.productName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
           ),
           Expanded(
-            child: editingIndex == index
+            child: editingIndex == index && editingField == 'quantity'
                 ? TextField(
-                    controller: editingController,
+                    controller: quantityController,
                     keyboardType: TextInputType.number,
+                    autofocus: true,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 14,
@@ -341,10 +369,10 @@ class _ReportsViewState extends State<_ReportsView> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    onSubmitted: (value) => _finishEditing(value),
+                    onSubmitted: (value) => _finishEditingQuantity(value),
                   )
                 : GestureDetector(
-                    onTap: () => _startEditing(index, product),
+                    onTap: () => _startEditing(index, product, 'quantity'),
                     child: Text(
                       '${product.totalQuantity}',
                       style: const TextStyle(
@@ -453,30 +481,35 @@ class _ReportsViewState extends State<_ReportsView> {
     }
   }
 
-  void _startEditing(int index, SalesReport product) {
+  void _startEditing(int index, SalesReport product, String field) {
     setState(() {
       editingIndex = index;
-      editingController.text = product.totalQuantity.toString();
-    });
-    // Enfocar el campo de texto
-    Future.delayed(const Duration(milliseconds: 100), () {
-      editingController.selection = TextSelection.fromPosition(
-        TextPosition(offset: editingController.text.length),
-      );
+      editingField = field;
+      if (field == 'quantity') {
+        quantityController.text = product.totalQuantity.toString();
+        Future.delayed(const Duration(milliseconds: 100), () {
+          quantityController.selection = TextSelection.fromPosition(
+            TextPosition(offset: quantityController.text.length),
+          );
+        });
+      } else if (field == 'name') {
+        nameController.text = product.productName;
+        Future.delayed(const Duration(milliseconds: 100), () {
+          nameController.selection = TextSelection.fromPosition(
+            TextPosition(offset: nameController.text.length),
+          );
+        });
+      }
     });
   }
 
-  void _finishEditing(String value) {
+  void _finishEditingQuantity(String value) {
     if (editingIndex == null) return;
-
     final newQuantity = int.tryParse(value);
     if (newQuantity != null && newQuantity >= 0) {
-      // Obtener el estado actual para acceder al reporte
       final state = context.read<ReportsBloc>().state;
       if (state is ReportsLoaded) {
-        // Encontrar el producto que se está editando
         final product = state.report.productReports[editingIndex!];
-
         context.read<ReportsBloc>().add(
           EditProductSales(
             productName: product.productName,
@@ -489,16 +522,73 @@ class _ReportsViewState extends State<_ReportsView> {
         const SnackBar(content: Text('Por favor ingrese una cantidad válida')),
       );
     }
-
     setState(() {
       editingIndex = null;
-      editingController.clear();
+      editingField = null;
+      quantityController.clear();
+    });
+  }
+
+  void _finishEditingName(String value) async {
+    if (editingIndex == null) return;
+    final newName = value.trim();
+    if (newName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El nombre no puede estar vacío')),
+      );
+      return;
+    }
+    final reportsState = context.read<ReportsBloc>().state;
+    if (reportsState is ReportsLoaded) {
+      final product = reportsState.report.productReports[editingIndex!];
+      // Buscar el producto original por nombre
+      final productBloc = context.read<ProductBloc>();
+      final productState = productBloc.state;
+      if (productState is ProductsLoaded) {
+        Product? original;
+        try {
+          original = productState.products.firstWhere(
+            (p) => p.name == product.productName,
+          );
+        } catch (_) {
+          original = null;
+        }
+        if (original != null) {
+          final updated = original.copyWith(
+            name: newName,
+            updatedAt: DateTime.now(),
+          );
+          productBloc.add(UpdateProduct(updated));
+          // Refrescar el reporte tras editar
+          context.read<ReportsBloc>().add(LoadTodayReport());
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'No se encontró el producto original para actualizar.',
+              ),
+            ),
+          );
+          setState(() {
+            editingIndex = null;
+            editingField = null;
+            nameController.clear();
+          });
+          return;
+        }
+      }
+    }
+    setState(() {
+      editingIndex = null;
+      editingField = null;
+      nameController.clear();
     });
   }
 
   @override
   void dispose() {
-    editingController.dispose();
+    quantityController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 }
