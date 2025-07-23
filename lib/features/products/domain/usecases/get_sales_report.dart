@@ -1,5 +1,6 @@
 import '../entities/sale.dart';
 import '../repositories/sale_repository.dart';
+import '../repositories/product_repository.dart';
 
 class SalesReport {
   final String productName;
@@ -48,20 +49,25 @@ class DailySalesReport {
 }
 
 class GetSalesReport {
-  final SaleRepository repository;
+  final SaleRepository saleRepository;
+  final ProductRepository productRepository;
 
-  GetSalesReport(this.repository);
+  GetSalesReport(this.saleRepository, this.productRepository);
 
   Future<DailySalesReport> call(DateTime day) async {
-    final sales = await repository.getSalesOfDay(day);
+    final sales = await saleRepository.getSalesOfDay(day);
+    final products = await productRepository.getAllProducts();
 
-    // Agrupar ventas por producto
-    final Map<String, List<Sale>> salesByProduct = {};
+    // Mapear productId a nombre actualizado
+    final Map<int, String> productIdToName = {
+      for (final p in products) p.id!: p.name,
+    };
+
+    // Agrupar ventas por productId
+    final Map<int, List<Sale>> salesByProductId = {};
     for (final sale in sales) {
-      if (!salesByProduct.containsKey(sale.productName)) {
-        salesByProduct[sale.productName] = [];
-      }
-      salesByProduct[sale.productName]!.add(sale);
+      salesByProductId.putIfAbsent(sale.productId, () => []);
+      salesByProductId[sale.productId]!.add(sale);
     }
 
     // Crear reportes por producto
@@ -69,7 +75,7 @@ class GetSalesReport {
     final List<IndividualSaleReport> individualSales = [];
     int totalDailyAmount = 0;
 
-    for (final entry in salesByProduct.entries) {
+    for (final entry in salesByProductId.entries) {
       final productSales = entry.value;
       final totalQuantity = productSales.fold<int>(
         0,
@@ -79,12 +85,13 @@ class GetSalesReport {
         0,
         (sum, sale) => sum + sale.totalAmount,
       );
-      final pricePerUnit =
-          productSales.first.pricePerUnit; // Asumiendo precio constante
+      final pricePerUnit = productSales.first.pricePerUnit;
+      final productName =
+          productIdToName[entry.key] ?? productSales.first.productName;
 
       productReports.add(
         SalesReport(
-          productName: entry.key,
+          productName: productName,
           totalQuantity: totalQuantity,
           totalAmount: totalAmount,
           pricePerUnit: pricePerUnit,
@@ -96,10 +103,11 @@ class GetSalesReport {
 
     // Crear lista de ventas individuales
     for (final sale in sales) {
+      final productName = productIdToName[sale.productId] ?? sale.productName;
       individualSales.add(
         IndividualSaleReport(
           saleId: sale.id!,
-          productName: sale.productName,
+          productName: productName,
           quantity: sale.quantity,
           totalAmount: sale.totalAmount,
           pricePerUnit: sale.pricePerUnit,

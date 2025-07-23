@@ -51,7 +51,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => PopulateSampleData(sl()));
   sl.registerLazySingleton(() => CreateSale(sl()));
   sl.registerLazySingleton(() => GetSalesOfDay(sl()));
-  sl.registerLazySingleton(() => GetSalesReport(sl()));
+  sl.registerLazySingleton(() => GetSalesReport(sl(), sl()));
   sl.registerLazySingleton(
     () => RegisterSaleFromStockUpdate(
       productRepository: sl(),
