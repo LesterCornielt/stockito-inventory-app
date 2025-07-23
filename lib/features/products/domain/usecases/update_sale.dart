@@ -35,9 +35,10 @@ class UpdateSale {
       return;
     }
 
-    // Verificar que hay suficiente stock si se está aumentando la cantidad
-    if (quantityDifference > 0 && product.stock < quantityDifference) {
-      throw Exception('Stock insuficiente para aumentar la cantidad');
+    // Permitir aumentar la cantidad aunque no haya suficiente stock, pero el stock nunca debe ser negativo
+    int newStock = product.stock - quantityDifference;
+    if (newStock < 0) {
+      newStock = 0;
     }
 
     // Actualizar la venta
@@ -48,9 +49,7 @@ class UpdateSale {
     await saleRepository.updateSale(updatedSale);
 
     // Actualizar el stock del producto
-    final updatedProduct = product.copyWith(
-      stock: product.stock - quantityDifference,
-    );
+    final updatedProduct = product.copyWith(stock: newStock);
     await productRepository.updateProduct(updatedProduct);
   }
 }

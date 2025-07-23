@@ -18,9 +18,10 @@ class RegisterSaleFromStockUpdate {
       throw Exception('Producto no encontrado');
     }
 
-    // Verificar que hay suficiente stock
-    if (product.stock < quantitySold) {
-      throw Exception('Stock insuficiente');
+    // Permitir la venta aunque el stock sea insuficiente, pero el stock nunca debe ser negativo
+    int newStock = product.stock - quantitySold;
+    if (newStock < 0) {
+      newStock = 0;
     }
 
     // Crear la venta
@@ -37,9 +38,7 @@ class RegisterSaleFromStockUpdate {
     await saleRepository.createSale(sale);
 
     // Actualizar el stock del producto
-    final updatedProduct = product.copyWith(
-      stock: product.stock - quantitySold,
-    );
+    final updatedProduct = product.copyWith(stock: newStock);
     await productRepository.updateProduct(updatedProduct);
   }
 }
