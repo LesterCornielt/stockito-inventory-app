@@ -10,6 +10,7 @@ import '../../../products/presentation/bloc/product_bloc.dart';
 import '../../../products/presentation/bloc/product_event.dart';
 import '../../../products/presentation/bloc/reports_bloc.dart';
 import '../../../lists/presentation/pages/lists_page.dart';
+import '../../../settings/presentation/pages/settings_page.dart';
 
 class MainNavigationPage extends StatelessWidget {
   const MainNavigationPage({super.key});
@@ -200,7 +201,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                 child: const ReportsPage(),
               ),
               const ListsPage(),
-              const _SettingsPage(),
+              const SettingsPage(),
             ],
           ),
           backgroundColor: Colors.white,
@@ -336,31 +337,4 @@ class _NavBarItemData {
   final IconData icon;
   final String label;
   const _NavBarItemData(this.icon, this.label);
-}
-
-// Placeholder pages - these will be implemented later
-
-class _SettingsPage extends StatelessWidget {
-  const _SettingsPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.settings, size: 80, color: Colors.grey),
-              SizedBox(height: 16),
-              Text(
-                'Pendiente a desarrollar',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
