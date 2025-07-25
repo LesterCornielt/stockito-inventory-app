@@ -268,7 +268,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                                 context.read<ProductBloc>().add(
                                   RegisterSale(
                                     productId: product.id!,
-                                    quantity: 1,
+                                    quantitySold: 1,
                                   ),
                                 );
                               }

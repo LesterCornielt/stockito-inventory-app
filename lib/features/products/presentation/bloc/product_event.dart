@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/product.dart';
+import 'dart:async';
 
 abstract class ProductEvent extends Equatable {
   const ProductEvent();
@@ -38,11 +39,12 @@ class CreateProduct extends ProductEvent {
 
 class UpdateProduct extends ProductEvent {
   final Product product;
+  final Completer<void>? completer;
 
-  const UpdateProduct(this.product);
+  const UpdateProduct(this.product, {this.completer});
 
   @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [product, completer];
 }
 
 class DeleteProduct extends ProductEvent {
@@ -64,12 +66,12 @@ class PopulateSampleData extends ProductEvent {
 
 class RegisterSale extends ProductEvent {
   final int productId;
-  final int quantity;
+  final int quantitySold;
 
-  const RegisterSale({required this.productId, required this.quantity});
+  const RegisterSale({required this.productId, required this.quantitySold});
 
   @override
-  List<Object?> get props => [productId, quantity];
+  List<Object?> get props => [productId, quantitySold];
 }
 
 class LoadSavedSearch extends ProductEvent {

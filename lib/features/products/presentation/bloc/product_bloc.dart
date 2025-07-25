@@ -185,7 +185,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await updateProduct(updatedProduct);
       if (success) {
-        // Si hay un estado actual con productos, actualizar solo el producto específico
         if (currentState is ProductsLoaded) {
           final updatedProducts = currentState.products.map((product) {
             if (product.id == updatedProduct.id) {
@@ -194,22 +193,19 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             return product;
           }).toList();
 
-          // FIX: Si hay búsqueda activa, reaplicar búsqueda
           if (currentState.searchQuery != null &&
               currentState.searchQuery!.isNotEmpty) {
             add(SearchProducts(currentState.searchQuery!));
-            return;
+          } else {
+            emit(
+              ProductUpdated(
+                products: updatedProducts,
+                product: updatedProduct,
+                searchQuery: currentState.searchQuery,
+              ),
+            );
           }
-
-          emit(
-            ProductUpdated(
-              products: updatedProducts,
-              product: updatedProduct,
-              searchQuery: currentState.searchQuery,
-            ),
-          );
         } else {
-          // Si no hay estado actual, recargar desde la base de datos
           final products = await getAllProducts(NoParams());
           emit(ProductUpdated(products: products, product: updatedProduct));
         }
@@ -225,6 +221,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       } else {
         emit(ProductError(message: e.toString()));
       }
+    } finally {
+      event.completer?.complete();
     }
   }
 
@@ -338,19 +336,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     try {
+      await registerSaleFromStockUpdate(event.productId, event.quantitySold);
+
+      // Después de registrar la venta y actualizar el stock,
+      // es importante reflejar el cambio en la UI
       final currentState = state;
-      if (currentState is ProductsLoaded) {
-        emit(
-          ProductOperationLoading(
-            products: currentState.products,
-            operation: 'Registrando venta...',
-          ),
-        );
-      }
-
-      await registerSaleFromStockUpdate(event.productId, event.quantity);
-
-      // Si hay un estado actual con productos, actualizar solo el producto específico
       if (currentState is ProductsLoaded) {
         // Obtener el producto actualizado desde la base de datos
         final updatedProduct = await getAllProducts(NoParams());
