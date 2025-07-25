@@ -250,7 +250,9 @@ class _ReportsViewState extends State<_ReportsView> {
           const SizedBox(height: 4),
           Text(
             title,
-            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
