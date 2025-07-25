@@ -484,24 +484,22 @@ void _showDeleteDialog(
 class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextField(
       decoration: InputDecoration(
         hintText: 'Buscar productos',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
+          borderSide: BorderSide(color: theme.dividerColor, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: 3,
-          ),
+          borderSide: BorderSide(color: theme.colorScheme.primary, width: 3),
         ),
         prefixIcon: const Icon(Icons.search),
         filled: true,
-        fillColor: Colors.grey.shade50,
+        fillColor: theme.colorScheme.surface,
       ),
       onChanged: (value) {
         context.read<ProductBloc>().add(SearchProducts(value));
