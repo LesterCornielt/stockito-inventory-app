@@ -231,16 +231,14 @@ class _ReportsViewState extends State<_ReportsView> {
       ),
       child: Column(
         children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+          Icon(icon, color: const Color(0xFF1976D2), size: 24),
           const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
               fontSize: isMoney ? 18 : 16,
               fontWeight: FontWeight.bold,
-              color: isMoney
-                  ? Theme.of(context).colorScheme.secondary
-                  : Theme.of(context).colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
@@ -279,27 +277,27 @@ class _ReportsViewState extends State<_ReportsView> {
                   flex: 3,
                   child: Text(
                     'Producto',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     'Cant.',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     'Precio',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Expanded(
                   child: Text(
                     'Total',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -326,14 +324,10 @@ class _ReportsViewState extends State<_ReportsView> {
     SalesReport product,
     int index,
   ) {
-    final isEven = index % 2 == 0;
-
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isEven
-            ? Theme.of(context).cardColor
-            : Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).cardColor,
         border: Border(
           bottom: BorderSide(color: Theme.of(context).dividerColor),
         ),
@@ -347,9 +341,10 @@ class _ReportsViewState extends State<_ReportsView> {
                     controller: nameController,
                     autofocus: true,
                     textAlign: TextAlign.start,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 14,
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -361,9 +356,10 @@ class _ReportsViewState extends State<_ReportsView> {
                     onTap: () => _startEditing(index, product, 'name'),
                     child: Text(
                       product.productName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -375,9 +371,10 @@ class _ReportsViewState extends State<_ReportsView> {
                     keyboardType: TextInputType.number,
                     autofocus: true,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -389,9 +386,10 @@ class _ReportsViewState extends State<_ReportsView> {
                     onTap: () => _startEditing(index, product, 'quantity'),
                     child: Text(
                       '${product.totalQuantity}',
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -401,8 +399,9 @@ class _ReportsViewState extends State<_ReportsView> {
             child: Text(
               '${product.pricePerUnit} CUP',
               style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).hintColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
@@ -411,9 +410,9 @@ class _ReportsViewState extends State<_ReportsView> {
             child: Text(
               '${product.totalAmount} CUP',
               style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
