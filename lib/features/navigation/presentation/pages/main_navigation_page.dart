@@ -204,7 +204,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
               const SettingsPage(),
             ],
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           floatingActionButton: state.currentIndex == 0
               ? PhysicalModel(
                   color: Colors.transparent,
