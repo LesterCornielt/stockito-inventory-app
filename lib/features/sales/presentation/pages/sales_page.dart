@@ -93,7 +93,7 @@ class _ReportsViewState extends State<_ReportsView> {
         'Reportes de Ventas',
         style: theme.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
-          color: colorScheme.onPrimary,
+          color: Colors.white,
         ),
       ),
     );
@@ -169,7 +169,7 @@ class _ReportsViewState extends State<_ReportsView> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.primaryContainer.withOpacity(0.3),
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: colorScheme.primaryContainer),
       ),
@@ -182,6 +182,7 @@ class _ReportsViewState extends State<_ReportsView> {
                 'Resumen del día',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: colorScheme.primary,
                 ),
               ),
               Text(
@@ -231,7 +232,7 @@ class _ReportsViewState extends State<_ReportsView> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
       ),
@@ -249,9 +250,7 @@ class _ReportsViewState extends State<_ReportsView> {
           const SizedBox(height: 4),
           Text(
             title,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),
         ],

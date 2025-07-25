@@ -219,7 +219,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                         context,
                         context.read<ProductBloc>(),
                       ),
-                      backgroundColor: const Color(0xFF1976D2),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: const CircleBorder(),
                       elevation: 0,
                       child: const Icon(
@@ -275,7 +275,7 @@ class _CustomBottomNavBar extends StatelessWidget {
         child: Container(
           height: 72, // Un poco más alto para mejor centrado
           decoration: BoxDecoration(
-            color: const Color(0xFF1976D2),
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(32),
           ),
           child: Row(
