@@ -5,10 +5,10 @@ import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../products/presentation/pages/product_list_page.dart';
-import '../../../products/presentation/pages/reports_page.dart';
+import '../../../sales/presentation/pages/sales_page.dart';
 import '../../../products/presentation/bloc/product_bloc.dart';
 import '../../../products/presentation/bloc/product_event.dart';
-import '../../../products/presentation/bloc/reports_bloc.dart';
+import '../../../sales/presentation/bloc/reports_bloc.dart';
 import '../../../lists/presentation/pages/lists_page.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 
@@ -198,7 +198,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
               const ProductListPage(),
               BlocProvider(
                 create: (_) => sl<ReportsBloc>(),
-                child: const ReportsPage(),
+                child: const SalesPage(),
               ),
               const ListsPage(),
               const SettingsPage(),
@@ -297,7 +297,8 @@ class _CustomBottomNavBar extends StatelessWidget {
                     ), // Centrado
                     decoration: isSelected
                         ? BoxDecoration(
-                            color: Colors.white.withOpacity(0.18),
+                            color: Theme.of(context).colorScheme.primary
+                                .withAlpha((0.18 * 255).toInt()),
                             borderRadius: BorderRadius.circular(24),
                           )
                         : null,

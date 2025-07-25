@@ -22,18 +22,16 @@ class MyApp extends StatelessWidget {
       builder: (context, mode, _) {
         return MaterialApp(
           title: 'Stockito',
-          theme: ThemeData(
+          theme: ThemeData.from(
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF1976D2),
             ),
-            useMaterial3: true,
           ),
-          darkTheme: ThemeData.dark().copyWith(
+          darkTheme: ThemeData.from(
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF1976D2),
               brightness: Brightness.dark,
             ),
-            useMaterial3: true,
           ),
           themeMode: mode,
           home: const MainNavigationPage(),

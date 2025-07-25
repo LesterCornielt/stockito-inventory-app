@@ -1,6 +1,6 @@
 import '../entities/sale.dart';
 import '../repositories/sale_repository.dart';
-import '../repositories/product_repository.dart';
+import '../../../products/domain/repositories/product_repository.dart';
 
 class SalesReport {
   final String productName;

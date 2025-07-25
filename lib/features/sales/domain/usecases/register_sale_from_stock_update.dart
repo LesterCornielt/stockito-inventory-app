@@ -1,5 +1,5 @@
 import '../entities/sale.dart';
-import '../repositories/product_repository.dart';
+import '../../../products/domain/repositories/product_repository.dart';
 import '../repositories/sale_repository.dart';
 
 class RegisterSaleFromStockUpdate {

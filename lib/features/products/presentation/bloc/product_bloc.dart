@@ -6,8 +6,9 @@ import '../../domain/usecases/delete_product.dart' as delete_use_case;
 import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/search_products.dart' as search_use_case;
 import '../../domain/usecases/update_product.dart' as update_use_case;
-import '../../domain/usecases/populate_sample_data.dart' as populate_use_case;
-import '../../domain/usecases/register_sale_from_stock_update.dart';
+import '../../../sales/domain/usecases/populate_sample_data.dart'
+    as populate_use_case;
+import '../../../sales/domain/usecases/register_sale_from_stock_update.dart';
 import '../../../../core/utils/persistence_service.dart';
 import 'product_event.dart';
 import 'product_state.dart';

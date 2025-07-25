@@ -5,13 +5,9 @@ import '../bloc/reports_bloc.dart';
 import '../bloc/reports_event.dart';
 import '../bloc/reports_state.dart';
 import '../../domain/usecases/get_sales_report.dart';
-import '../bloc/product_bloc.dart';
-import '../bloc/product_event.dart';
-import '../bloc/product_state.dart';
-import '../../domain/entities/product.dart';
 
-class ReportsPage extends StatelessWidget {
-  const ReportsPage({super.key});
+class SalesPage extends StatelessWidget {
+  const SalesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +51,14 @@ class _ReportsViewState extends State<_ReportsView> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1976D2),
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: const Text(
+                child: Text(
                   'Reportes de Ventas',
-                  style: TextStyle(
-                    fontSize: 20,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ),
@@ -101,12 +96,15 @@ class _ReportsViewState extends State<_ReportsView> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: Theme.of(context).dividerColor),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today, color: Color(0xFF1976D2)),
+                  Icon(
+                    Icons.calendar_today,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   const SizedBox(width: 8),
                   BlocBuilder<ReportsBloc, ReportsState>(
                     builder: (context, state) {
@@ -136,7 +134,10 @@ class _ReportsViewState extends State<_ReportsView> {
           onPressed: () {
             context.read<ReportsBloc>().add(const LoadTodayReport());
           },
-          icon: const Icon(Icons.refresh, color: Color(0xFF1976D2)),
+          icon: Icon(
+            Icons.refresh,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           tooltip: 'Actualizar',
         ),
       ],
@@ -159,9 +160,15 @@ class _ReportsViewState extends State<_ReportsView> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1976D2).withOpacity(0.1),
+        color: Theme.of(
+          context,
+        ).colorScheme.primary.withAlpha((0.08 * 255).toInt()),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF1976D2).withOpacity(0.3)),
+        border: Border.all(
+          color: Theme.of(
+            context,
+          ).colorScheme.primary.withAlpha((0.18 * 255).toInt()),
+        ),
       ),
       child: Column(
         children: [
@@ -174,9 +181,9 @@ class _ReportsViewState extends State<_ReportsView> {
               ),
               Text(
                 DateFormat('dd/MM/yyyy').format(report.date),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFF1976D2),
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -217,26 +224,28 @@ class _ReportsViewState extends State<_ReportsView> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Column(
         children: [
-          Icon(icon, color: const Color(0xFF1976D2), size: 24),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(height: 8),
           Text(
             value,
             style: TextStyle(
               fontSize: isMoney ? 18 : 16,
               fontWeight: FontWeight.bold,
-              color: isMoney ? Colors.green : Colors.black87,
+              color: isMoney
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(fontSize: 12, color: Theme.of(context).hintColor),
             textAlign: TextAlign.center,
           ),
         ],
@@ -247,9 +256,9 @@ class _ReportsViewState extends State<_ReportsView> {
   Widget _buildProductsList(BuildContext context, List<SalesReport> products) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Column(
         children: [
@@ -257,7 +266,7 @@ class _ReportsViewState extends State<_ReportsView> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -321,8 +330,12 @@ class _ReportsViewState extends State<_ReportsView> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isEven ? Colors.white : Colors.grey.shade50,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
+        color: isEven
+            ? Theme.of(context).cardColor
+            : Theme.of(context).colorScheme.surfaceContainerHighest,
+        border: Border(
+          bottom: BorderSide(color: Theme.of(context).dividerColor),
+        ),
       ),
       child: Row(
         children: [
@@ -386,17 +399,20 @@ class _ReportsViewState extends State<_ReportsView> {
           Expanded(
             child: Text(
               '${product.pricePerUnit} CUP',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).hintColor,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: Text(
               '${product.totalAmount} CUP',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: Theme.of(context).colorScheme.secondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -411,20 +427,27 @@ class _ReportsViewState extends State<_ReportsView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.analytics_outlined, size: 80, color: Colors.grey.shade400),
+          Icon(
+            Icons.analytics_outlined,
+            size: 80,
+            color: Theme.of(context).disabledColor,
+          ),
           const SizedBox(height: 16),
           Text(
             'No hay ventas registradas',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
+              color: Theme.of(context).hintColor,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'para el ${DateFormat('dd/MM/yyyy').format(date)}',
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade500),
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).disabledColor,
+            ),
           ),
         ],
       ),
@@ -436,20 +459,24 @@ class _ReportsViewState extends State<_ReportsView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 80, color: Colors.red.shade400),
+          Icon(
+            Icons.error_outline,
+            size: 80,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(height: 16),
           Text(
             'Error al cargar reportes',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Colors.red.shade600,
+              color: Theme.of(context).colorScheme.error,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             message,
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 16, color: Theme.of(context).hintColor),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -458,8 +485,8 @@ class _ReportsViewState extends State<_ReportsView> {
               context.read<ReportsBloc>().add(const LoadTodayReport());
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1976D2),
-              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
             child: const Text('Reintentar'),
           ),
@@ -538,46 +565,46 @@ class _ReportsViewState extends State<_ReportsView> {
       );
       return;
     }
-    final reportsState = context.read<ReportsBloc>().state;
-    if (reportsState is ReportsLoaded) {
-      final product = reportsState.report.productReports[editingIndex!];
-      // Buscar el producto original por nombre
-      final productBloc = context.read<ProductBloc>();
-      final productState = productBloc.state;
-      if (productState is ProductsLoaded) {
-        Product? original;
-        try {
-          original = productState.products.firstWhere(
-            (p) => p.name == product.productName,
-          );
-        } catch (_) {
-          original = null;
-        }
-        if (original != null) {
-          final updated = original.copyWith(
-            name: newName,
-            updatedAt: DateTime.now(),
-          );
-          productBloc.add(UpdateProduct(updated));
-          // Refrescar el reporte tras editar
-          context.read<ReportsBloc>().add(LoadTodayReport());
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'No se encontró el producto original para actualizar.',
-              ),
-            ),
-          );
-          setState(() {
-            editingIndex = null;
-            editingField = null;
-            nameController.clear();
-          });
-          return;
-        }
-      }
-    }
+    // final reportsState = context.read<ReportsBloc>().state;
+    // if (reportsState is ReportsLoaded) {
+    //   final product = reportsState.report.productReports[editingIndex!];
+    //   // Buscar el producto original por nombre
+    //   // final productBloc = context.read<ProductBloc>();
+    //   // final productState = productBloc.state;
+    //   // if (productState is ProductsLoaded) {
+    //   //   Product? original;
+    //   //   try {
+    //   //     original = productState.products.firstWhere(
+    //   //       (p) => p.name == product.productName,
+    //   //     );
+    //   //   } catch (_) {
+    //   //     original = null;
+    //   //   }
+    //   //   if (original != null) {
+    //   //     final updated = original.copyWith(
+    //   //       name: newName,
+    //   //       updatedAt: DateTime.now(),
+    //   //     );
+    //   //     productBloc.add(UpdateProduct(updated));
+    //   //     // Refrescar el reporte tras editar
+    //   //     context.read<ReportsBloc>().add(LoadTodayReport());
+    //   //   } else {
+    //   //     ScaffoldMessenger.of(context).showSnackBar(
+    //   //       const SnackBar(
+    //   //         content: Text(
+    //   //           'No se encontró el producto original para actualizar.',
+    //   //         ),
+    //   //       ),
+    //   //     );
+    //   //     setState(() {
+    //   //       editingIndex = null;
+    //   //       editingField = null;
+    //   //       nameController.clear();
+    //   //     });
+    //   //     return;
+    //   //   }
+    //   // }
+    // }
     setState(() {
       editingIndex = null;
       editingField = null;

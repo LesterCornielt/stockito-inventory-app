@@ -1,4 +1,4 @@
-import '../repositories/product_repository.dart';
+import '../../../products/domain/repositories/product_repository.dart';
 
 class PopulateSampleData {
   final ProductRepository repository;
