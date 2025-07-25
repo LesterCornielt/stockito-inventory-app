@@ -51,14 +51,15 @@ class _ReportsViewState extends State<_ReportsView> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: const Color(0xFF1976D2),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Text(
                   'Reportes de Ventas',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: const TextStyle(
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Colors.white,
                   ),
                 ),
               ),
