@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stockito/l10n/app_localizations.dart';
 import '../../../../main.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -80,9 +81,9 @@ class _SettingsPageState extends State<SettingsPage>
                   color: const Color(0xFF1976D2),
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: const Text(
-                  'Configuración',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.translate('settings'),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -166,6 +167,32 @@ class _SettingsPageState extends State<SettingsPage>
                     const ListTile(
                       leading: Icon(Icons.info_outline),
                       title: Text('Acerca de'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.language),
+                      title: const Text('Idioma'),
+                      trailing: DropdownButton<Locale>(
+                        value: localeNotifier.value,
+                        onChanged: (Locale? newLocale) {
+                          if (newLocale != null) {
+                            localeNotifier.value = newLocale;
+                          }
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: Locale('en'),
+                            child: Text('English'),
+                          ),
+                          DropdownMenuItem(
+                            value: Locale('es'),
+                            child: Text('Español'),
+                          ),
+                          DropdownMenuItem(
+                            value: Locale('pt'),
+                            child: Text('Português'),
+                          ),
+                        ],
+                      ),
                     ),
                     const ListTile(
                       leading: Icon(Icons.logout),
