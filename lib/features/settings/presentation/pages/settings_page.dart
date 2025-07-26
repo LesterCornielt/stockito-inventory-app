@@ -65,79 +65,118 @@ class _SettingsPageState extends State<SettingsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Configuración')),
-      body: ListView(
-        children: [
-          ValueListenableBuilder<ThemeMode>(
-            valueListenable: themeModeNotifier,
-            builder: (context, themeMode, child) {
-              final isDark = themeMode == ThemeMode.dark;
-              return SwitchListTile(
-                secondary: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _scaleAnimation.value,
-                      child: Transform.rotate(
-                        angle: _rotationAnimation.value * 3.14159 / 180,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          child: Icon(
-                            Icons.brightness_6,
-                            color: isDark
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(
-                                    context,
-                                  ).colorScheme.primary.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
                 ),
-                title: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (child, animation) =>
-                      FadeTransition(opacity: animation, child: child),
-                  layoutBuilder: (currentChild, previousChildren) {
-                    return Stack(
-                      alignment: Alignment.centerLeft,
-                      children: <Widget>[
-                        ...previousChildren,
-                        if (currentChild != null) currentChild,
-                      ],
-                    );
-                  },
-                  child: Text(
-                    isDark ? 'Modo claro' : 'Modo oscuro',
-                    key: ValueKey(isDark),
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1976D2),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: const Text(
+                  'Configuración',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                value: isDark,
-                activeColor: Theme.of(context).colorScheme.primary,
-                onChanged: (value) {
-                  if (value) {
-                    _controller.forward();
-                  } else {
-                    _controller.reverse();
-                  }
-                  themeModeNotifier.value = value
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
-                },
-              );
-            },
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView(
+                  children: [
+                    ValueListenableBuilder<ThemeMode>(
+                      valueListenable: themeModeNotifier,
+                      builder: (context, themeMode, child) {
+                        final isDark = themeMode == ThemeMode.dark;
+                        return SwitchListTile(
+                          secondary: AnimatedBuilder(
+                            animation: _controller,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Transform.rotate(
+                                  angle:
+                                      _rotationAnimation.value * 3.14159 / 180,
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    child: Icon(
+                                      Icons.brightness_6,
+                                      color: isDark
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
+                                          : Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          title: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) =>
+                                FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                ),
+                            layoutBuilder: (currentChild, previousChildren) {
+                              return Stack(
+                                alignment: Alignment.centerLeft,
+                                children: <Widget>[
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
+                              );
+                            },
+                            child: Text(
+                              isDark ? 'Modo claro' : 'Modo oscuro',
+                              key: ValueKey(isDark),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          value: isDark,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          onChanged: (value) {
+                            if (value) {
+                              _controller.forward();
+                            } else {
+                              _controller.reverse();
+                            }
+                            themeModeNotifier.value = value
+                                ? ThemeMode.dark
+                                : ThemeMode.light;
+                          },
+                        );
+                      },
+                    ),
+                    const ListTile(
+                      leading: Icon(Icons.info_outline),
+                      title: Text('Acerca de'),
+                    ),
+                    const ListTile(
+                      leading: Icon(Icons.logout),
+                      title: Text('Cerrar sesión'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('Acerca de'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Cerrar sesión'),
-          ),
-        ],
+        ),
       ),
     );
   }
