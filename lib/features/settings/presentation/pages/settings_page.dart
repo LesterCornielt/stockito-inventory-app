@@ -201,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage>
                     ListTile(
                       leading: const Icon(Icons.info_outline),
                       title: Text(
-                        AppLocalizations.of(context)!.translate('about'),
+                        AppLocalizations.of(context)!.translate('developed_by'),
                       ),
                     ),
                     ListTile(

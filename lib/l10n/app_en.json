@@ -48,6 +48,7 @@
   "retry": "Retry",
   "enter_valid_quantity": "Please enter a valid quantity",
   "name_not_empty": "Name cannot be empty",
-  "product_not_found": "Original product not found to update.",
-  "pending_development": "Pending development"
+  "product_not_found": "Original product not found for update.",
+  "pending_development": "Pending development",
+  "developed_by": "Developed by Lester Cornielt"
 } 

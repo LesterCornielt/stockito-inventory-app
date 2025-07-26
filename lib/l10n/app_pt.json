@@ -48,6 +48,7 @@
   "retry": "Tentar novamente",
   "enter_valid_quantity": "Por favor, insira uma quantidade válida",
   "name_not_empty": "O nome não pode estar vazio",
-  "product_not_found": "Produto original não encontrado para atualizar.",
-  "pending_development": "Desenvolvimento pendente"
+  "product_not_found": "Não foi possível encontrar o produto original para atualizar.",
+  "pending_development": "Pendente de desenvolvimento",
+  "developed_by": "Desenvolvido por Lester Cornielt"
 } 
