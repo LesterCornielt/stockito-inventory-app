@@ -123,8 +123,7 @@ class _ProductListView extends StatelessWidget {
 // Reemplazar _SampleDialogCheckbox por un widget estático
 class _SampleDialogCheckbox extends StatelessWidget {
   final bool initialValue;
-  const _SampleDialogCheckbox({Key? key, required this.initialValue})
-    : super(key: key);
+  const _SampleDialogCheckbox({super.key, required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -187,13 +186,14 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
   }
   return ListView.separated(
     itemCount: sortedProducts.length,
-    separatorBuilder: (_, __) => const SizedBox(height: 8),
+    separatorBuilder: (_, __) => const SizedBox(height: 1),
     itemBuilder: (context, index) {
       final product = sortedProducts[index];
       return Card(
-        elevation: 2,
+        elevation: 1,
+        margin: const EdgeInsets.symmetric(vertical: 1),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -204,13 +204,13 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                     child: Text(
                       product.name,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   PopupMenuButton<String>(
-                    icon: const Icon(Icons.more_vert, size: 20),
+                    icon: const Icon(Icons.more_vert, size: 16),
                     onSelected: (value) {
                       if (value == 'edit') {
                         _showEditDialog(
@@ -231,7 +231,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                         value: 'edit',
                         child: Row(
                           children: [
-                            Icon(Icons.edit, size: 20),
+                            Icon(Icons.edit, size: 16),
                             SizedBox(width: 8),
                             Text('Editar'),
                           ],
@@ -241,7 +241,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                         value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.delete, size: 20, color: Colors.red),
+                            Icon(Icons.delete, size: 16, color: Colors.red),
                             SizedBox(width: 8),
                             Text(
                               'Eliminar',
@@ -254,13 +254,15 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                   ),
                 ],
               ),
-              const SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Text('Cantidad: ${product.stock}'),
+                      Text(
+                        'Cantidad: ${product.stock}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
                       const SizedBox(width: 8),
                       IconButton(
                         onPressed: product.stock > 0
@@ -273,7 +275,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                                 );
                               }
                             : null,
-                        icon: const Icon(Icons.remove),
+                        icon: const Icon(Icons.remove, size: 16),
                         style: IconButton.styleFrom(
                           backgroundColor: product.stock > 0
                               ? Colors.red.shade100
@@ -281,7 +283,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                           foregroundColor: product.stock > 0
                               ? Colors.red.shade700
                               : Colors.grey.shade500,
-                          minimumSize: const Size(32, 32),
+                          minimumSize: const Size(24, 24),
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -295,11 +297,11 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                             UpdateProduct(updatedProduct),
                           );
                         },
-                        icon: const Icon(Icons.add),
+                        icon: const Icon(Icons.add, size: 16),
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.green.shade100,
                           foregroundColor: Colors.green.shade700,
-                          minimumSize: const Size(32, 32),
+                          minimumSize: const Size(24, 24),
                         ),
                       ),
                     ],
@@ -308,7 +310,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                     '${product.price} CUP',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                 ],

@@ -26,14 +26,12 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF1976D2),
               primary: const Color(0xFF1976D2),
-              secondary: Colors.amber,
             ),
           ),
           darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF1976D2),
               primary: const Color(0xFF1976D2),
-              secondary: Colors.amber,
               brightness: Brightness.dark,
             ),
           ),
