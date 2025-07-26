@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stockito/l10n/app_localizations.dart';
 import '../bloc/navigation_bloc.dart';
 import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
@@ -65,7 +66,9 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Añadir Producto'),
+              title: Text(
+                AppLocalizations.of(context)!.translate('add_product'),
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -83,26 +86,32 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                     ],
                     TextField(
                       controller: nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nombre',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(
+                          context,
+                        )!.translate('name'),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: priceController,
-                      decoration: const InputDecoration(
-                        labelText: 'Precio CUP',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(
+                          context,
+                        )!.translate('price'),
+                        border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: stockController,
-                      decoration: const InputDecoration(
-                        labelText: 'Cantidad',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(
+                          context,
+                        )!.translate('quantity'),
+                        border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -112,7 +121,9 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancelar'),
+                  child: Text(
+                    AppLocalizations.of(context)!.translate('cancel'),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -122,24 +133,27 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
 
                     if (name.isEmpty) {
                       setState(() {
-                        errorMessage =
-                            'El nombre del producto no puede estar vacío';
+                        errorMessage = AppLocalizations.of(
+                          context,
+                        )!.translate('product_name_empty');
                       });
                       return;
                     }
 
                     if (price == null || price < 1) {
                       setState(() {
-                        errorMessage =
-                            'El precio debe ser un número entero válido mayor o igual a 1';
+                        errorMessage = AppLocalizations.of(
+                          context,
+                        )!.translate('price_invalid');
                       });
                       return;
                     }
 
                     if (stock == null || stock < 1) {
                       setState(() {
-                        errorMessage =
-                            'La cantidad debe ser un número entero mayor o igual a 1';
+                        errorMessage = AppLocalizations.of(
+                          context,
+                        )!.translate('quantity_invalid');
                       });
                       return;
                     }
@@ -149,13 +163,17 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                     );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Producto añadido exitosamente'),
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.translate('product_added_successfully'),
+                        ),
                         backgroundColor: Colors.green,
                       ),
                     );
                   },
-                  child: const Text('Añadir'),
+                  child: Text(AppLocalizations.of(context)!.translate('add')),
                 ),
               ],
             );
@@ -261,6 +279,24 @@ class _CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = [
+      _NavBarItemData(
+        Icons.inventory,
+        AppLocalizations.of(context)!.translate('products'),
+      ),
+      _NavBarItemData(
+        Icons.analytics,
+        AppLocalizations.of(context)!.translate('sales'),
+      ),
+      _NavBarItemData(
+        Icons.list,
+        AppLocalizations.of(context)!.translate('lists'),
+      ),
+      _NavBarItemData(
+        Icons.settings,
+        AppLocalizations.of(context)!.translate('settings'),
+      ),
+    ];
     return Padding(
       padding: const EdgeInsets.only(
         left: 24,
@@ -281,8 +317,8 @@ class _CustomBottomNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center, // Centrado vertical
-            children: List.generate(_items.length, (index) {
-              final item = _items[index];
+            children: List.generate(items.length, (index) {
+              final item = items[index];
               final isSelected = index == currentIndex;
               return Expanded(
                 child: InkWell(

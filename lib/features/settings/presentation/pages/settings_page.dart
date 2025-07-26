@@ -142,7 +142,13 @@ class _SettingsPageState extends State<SettingsPage>
                               );
                             },
                             child: Text(
-                              isDark ? 'Modo claro' : 'Modo oscuro',
+                              isDark
+                                  ? AppLocalizations.of(
+                                      context,
+                                    )!.translate('light_mode')
+                                  : AppLocalizations.of(
+                                      context,
+                                    )!.translate('dark_mode'),
                               key: ValueKey(isDark),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -164,13 +170,17 @@ class _SettingsPageState extends State<SettingsPage>
                         );
                       },
                     ),
-                    const ListTile(
-                      leading: Icon(Icons.info_outline),
-                      title: Text('Acerca de'),
+                    ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      title: Text(
+                        AppLocalizations.of(context)!.translate('about'),
+                      ),
                     ),
                     ListTile(
                       leading: const Icon(Icons.language),
-                      title: const Text('Idioma'),
+                      title: Text(
+                        AppLocalizations.of(context)!.translate('language'),
+                      ),
                       trailing: DropdownButton<Locale>(
                         value: localeNotifier.value,
                         onChanged: (Locale? newLocale) {
@@ -194,9 +204,11 @@ class _SettingsPageState extends State<SettingsPage>
                         ],
                       ),
                     ),
-                    const ListTile(
-                      leading: Icon(Icons.logout),
-                      title: Text('Cerrar sesión'),
+                    ListTile(
+                      leading: const Icon(Icons.logout),
+                      title: Text(
+                        AppLocalizations.of(context)!.translate('logout'),
+                      ),
                     ),
                   ],
                 ),

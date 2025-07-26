@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stockito/l10n/app_localizations.dart';
 import '../../presentation/bloc/product_bloc.dart';
 import '../../presentation/bloc/product_event.dart';
 import '../../presentation/bloc/product_state.dart';
@@ -40,9 +41,9 @@ class _ProductListView extends StatelessWidget {
                   color: const Color(0xFF1976D2),
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: const Text(
-                  'Productos',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.translate('products'),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -70,13 +71,15 @@ class _ProductListView extends StatelessWidget {
                         } else if (state is ProductsEmpty) {
                           if (state.searchQuery != null &&
                               state.searchQuery!.isNotEmpty) {
-                            return const Center(
+                            return Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'No tiene un producto con ese nombre registrado',
-                                    style: TextStyle(fontSize: 16),
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.translate('no_product_found'),
+                                    style: const TextStyle(fontSize: 16),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
@@ -87,10 +90,12 @@ class _ProductListView extends StatelessWidget {
                               initialValue: showSampleDialog,
                             );
                           } else {
-                            return const Center(
+                            return Center(
                               child: Text(
-                                'No hay productos registrados aún',
-                                style: TextStyle(fontSize: 16),
+                                AppLocalizations.of(
+                                  context,
+                                )!.translate('no_products_yet'),
+                                style: const TextStyle(fontSize: 16),
                                 textAlign: TextAlign.center,
                               ),
                             );
@@ -131,9 +136,9 @@ class _SampleDialogCheckbox extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'No hay productos registrados aún',
-            style: TextStyle(fontSize: 16),
+          Text(
+            AppLocalizations.of(context)!.translate('no_products_yet'),
+            style: const TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -148,7 +153,9 @@ class _SampleDialogCheckbox extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Cargar Productos de Ejemplo'),
+            child: Text(
+              AppLocalizations.of(context)!.translate('load_sample_products'),
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -162,7 +169,7 @@ class _SampleDialogCheckbox extends StatelessWidget {
                   // No es necesario hacer setState ni nada, el cambio se reflejará al reiniciar la app
                 },
               ),
-              const Text('Mostrar cada vez que inicie la app'),
+              Text(AppLocalizations.of(context)!.translate('show_on_startup')),
             ],
           ),
         ],
@@ -177,10 +184,10 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
   final sortedProducts = List<Product>.from(products)
     ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
   if (sortedProducts.isEmpty) {
-    return const Center(
+    return Center(
       child: Text(
-        'No hay productos registrados',
-        style: TextStyle(fontSize: 16),
+        AppLocalizations.of(context)!.translate('no_products_yet'),
+        style: const TextStyle(fontSize: 16),
       ),
     );
   }
@@ -227,25 +234,31 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'edit',
                         child: Row(
                           children: [
-                            Icon(Icons.edit, size: 16),
-                            SizedBox(width: 8),
-                            Text('Editar'),
+                            const Icon(Icons.edit, size: 16),
+                            const SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.translate('edit'),
+                            ),
                           ],
                         ),
                       ),
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.delete, size: 16, color: Colors.red),
-                            SizedBox(width: 8),
+                            const Icon(
+                              Icons.delete,
+                              size: 16,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(width: 8),
                             Text(
-                              'Eliminar',
-                              style: TextStyle(color: Colors.red),
+                              AppLocalizations.of(context)!.translate('delete'),
+                              style: const TextStyle(color: Colors.red),
                             ),
                           ],
                         ),
@@ -260,7 +273,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                   Row(
                     children: [
                       Text(
-                        'Cantidad: ${product.stock}',
+                        '${AppLocalizations.of(context)!.translate('quantity')}: ${product.stock}',
                         style: const TextStyle(fontSize: 12),
                       ),
                       const SizedBox(width: 8),
@@ -336,7 +349,9 @@ void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: const Text('Editar Producto'),
+            title: Text(
+              AppLocalizations.of(context)!.translate('edit_product'),
+            ),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -354,26 +369,32 @@ void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
                   ],
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('name'),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: priceController,
-                    decoration: const InputDecoration(
-                      labelText: 'Precio CUP',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('price'),
+                      border: const OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: stockController,
-                    decoration: const InputDecoration(
-                      labelText: 'Cantidad',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.translate('quantity'),
+                      border: const OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -383,7 +404,7 @@ void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancelar'),
+                child: Text(AppLocalizations.of(context)!.translate('cancel')),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -393,23 +414,27 @@ void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
 
                   if (newName.isEmpty) {
                     setState(() {
-                      errorMessage =
-                          'El nombre del producto no puede estar vacío';
+                      errorMessage = AppLocalizations.of(
+                        context,
+                      )!.translate('product_name_empty');
                     });
                     return;
                   }
 
                   if (newPrice == null || newPrice < 1) {
                     setState(() {
-                      errorMessage = 'El precio debe ser mayor o igual a 1 CUP';
+                      errorMessage = AppLocalizations.of(
+                        context,
+                      )!.translate('price_invalid_format');
                     });
                     return;
                   }
 
                   if (newStock == null || newStock < 1) {
                     setState(() {
-                      errorMessage =
-                          'La cantidad debe ser mayor o igual a 1 unidad';
+                      errorMessage = AppLocalizations.of(
+                        context,
+                      )!.translate('quantity_invalid_format');
                     });
                     return;
                   }
@@ -423,13 +448,17 @@ void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
                   bloc.add(UpdateProduct(updatedProduct));
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Producto actualizado exitosamente'),
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.translate('product_updated_successfully'),
+                      ),
                       backgroundColor: Colors.green,
                     ),
                   );
                 },
-                child: const Text('Guardar'),
+                child: Text(AppLocalizations.of(context)!.translate('save')),
               ),
             ],
           );
@@ -448,14 +477,14 @@ void _showDeleteDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Eliminar Producto'),
+        title: Text(AppLocalizations.of(context)!.translate('delete_product')),
         content: Text(
-          '¿Estás seguro de que quieres eliminar "${product.name}"?',
+          '${AppLocalizations.of(context)!.translate('confirm_delete')} "${product.name}"?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
+            child: Text(AppLocalizations.of(context)!.translate('cancel')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -464,7 +493,7 @@ void _showDeleteDialog(
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Producto "${product.name}" eliminado exitosamente',
+                    '${AppLocalizations.of(context)!.translate('product')} "${product.name}" ${AppLocalizations.of(context)!.translate('deleted_successfully')}',
                   ),
                   backgroundColor: Colors.green,
                 ),
@@ -474,7 +503,7 @@ void _showDeleteDialog(
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Eliminar'),
+            child: Text(AppLocalizations.of(context)!.translate('delete')),
           ),
         ],
       );
@@ -488,7 +517,7 @@ class _SearchBar extends StatelessWidget {
     final theme = Theme.of(context);
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Buscar productos',
+        hintText: AppLocalizations.of(context)!.translate('search_products'),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

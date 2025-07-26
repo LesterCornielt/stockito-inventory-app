@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stockito/l10n/app_localizations.dart';
 
 class ListsPage extends StatelessWidget {
   const ListsPage({super.key});
@@ -22,9 +23,9 @@ class ListsPage extends StatelessWidget {
                   color: const Color(0xFF1976D2),
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: const Text(
-                  'Listas',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.translate('lists'),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -38,11 +39,13 @@ class ListsPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.list_alt, size: 80, color: Colors.grey),
+                      const Icon(Icons.list_alt, size: 80, color: Colors.grey),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Pendiente a desarrollar',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.translate('pending_development'),
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                         ),

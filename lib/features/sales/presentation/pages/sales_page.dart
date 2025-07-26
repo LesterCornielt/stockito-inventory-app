@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:stockito/l10n/app_localizations.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../bloc/reports_bloc.dart';
 import '../bloc/reports_event.dart';
@@ -90,7 +91,7 @@ class _ReportsViewState extends State<_ReportsView> {
         borderRadius: BorderRadius.circular(24),
       ),
       child: Text(
-        'Reportes de Ventas',
+        AppLocalizations.of(context)!.translate('sales_reports'),
         style: theme.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
           color: Colors.white,
@@ -120,7 +121,9 @@ class _ReportsViewState extends State<_ReportsView> {
                   const SizedBox(width: 8),
                   BlocBuilder<ReportsBloc, ReportsState>(
                     builder: (context, state) {
-                      String dateText = 'Hoy';
+                      String dateText = AppLocalizations.of(
+                        context,
+                      )!.translate('today');
                       if (state is ReportsLoaded || state is ReportsEmpty) {
                         final date = state is ReportsLoaded
                             ? state.report.date
@@ -146,7 +149,7 @@ class _ReportsViewState extends State<_ReportsView> {
             context.read<ReportsBloc>().add(const LoadTodayReport());
           },
           icon: Icon(Icons.refresh, color: colorScheme.primary),
-          tooltip: 'Actualizar',
+          tooltip: AppLocalizations.of(context)!.translate('refresh'),
         ),
       ],
     );
@@ -179,7 +182,7 @@ class _ReportsViewState extends State<_ReportsView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Resumen del día',
+                AppLocalizations.of(context)!.translate('daily_summary'),
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
@@ -199,7 +202,7 @@ class _ReportsViewState extends State<_ReportsView> {
             children: [
               Expanded(
                 child: _buildSummaryCard(
-                  'Productos vendidos',
+                  AppLocalizations.of(context)!.translate('products_sold'),
                   '${report.productReports.length}',
                   Icons.inventory,
                 ),
@@ -207,7 +210,7 @@ class _ReportsViewState extends State<_ReportsView> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildSummaryCard(
-                  'Total vendido',
+                  AppLocalizations.of(context)!.translate('total_sold'),
                   '${report.totalDailyAmount} CUP',
                   Icons.attach_money,
                   isMoney: true,
@@ -286,7 +289,7 @@ class _ReportsViewState extends State<_ReportsView> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    'Producto',
+                    AppLocalizations.of(context)!.translate('product'),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -294,16 +297,7 @@ class _ReportsViewState extends State<_ReportsView> {
                 ),
                 Expanded(
                   child: Text(
-                    'Cant.',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Precio',
+                    AppLocalizations.of(context)!.translate('quantity_short'),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -312,7 +306,16 @@ class _ReportsViewState extends State<_ReportsView> {
                 ),
                 Expanded(
                   child: Text(
-                    'Total',
+                    AppLocalizations.of(context)!.translate('price'),
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.translate('total'),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -445,14 +448,14 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
           const SizedBox(height: 16),
           Text(
-            'No hay ventas registradas',
+            AppLocalizations.of(context)!.translate('no_sales_registered'),
             style: theme.textTheme.headlineSmall?.copyWith(
               color: colorScheme.onSurface.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'para el ${DateFormat('dd/MM/yyyy').format(date)}',
+            '${AppLocalizations.of(context)!.translate('for_date')} ${DateFormat('dd/MM/yyyy').format(date)}',
             style: theme.textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface.withOpacity(0.6),
             ),
@@ -476,7 +479,7 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Error al cargar reportes',
+            AppLocalizations.of(context)!.translate('error_loading_reports'),
             style: theme.textTheme.headlineSmall?.copyWith(
               color: colorScheme.error,
             ),
@@ -498,7 +501,7 @@ class _ReportsViewState extends State<_ReportsView> {
               backgroundColor: colorScheme.primary,
               foregroundColor: colorScheme.onPrimary,
             ),
-            child: const Text('Reintentar'),
+            child: Text(AppLocalizations.of(context)!.translate('retry')),
           ),
         ],
       ),
@@ -556,7 +559,11 @@ class _ReportsViewState extends State<_ReportsView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor ingrese una cantidad válida')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('enter_valid_quantity'),
+          ),
+        ),
       );
     }
     setState(() {
@@ -571,7 +578,11 @@ class _ReportsViewState extends State<_ReportsView> {
     final newName = value.trim();
     if (newName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('El nombre no puede estar vacío')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('name_not_empty'),
+          ),
+        ),
       );
       return;
     }
@@ -599,9 +610,9 @@ class _ReportsViewState extends State<_ReportsView> {
           productBloc.add(UpdateProduct(updated));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
-                'No se encontró el producto original para actualizar.',
+                AppLocalizations.of(context)!.translate('product_not_found'),
               ),
             ),
           );
