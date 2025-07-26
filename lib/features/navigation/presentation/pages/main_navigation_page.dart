@@ -354,7 +354,7 @@ class _CustomBottomNavBar extends StatelessWidget {
                             fontWeight: isSelected
                                 ? FontWeight.bold
                                 : FontWeight.normal,
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                       ],

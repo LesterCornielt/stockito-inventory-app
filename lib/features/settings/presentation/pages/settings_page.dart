@@ -171,12 +171,6 @@ class _SettingsPageState extends State<SettingsPage>
                       },
                     ),
                     ListTile(
-                      leading: const Icon(Icons.info_outline),
-                      title: Text(
-                        AppLocalizations.of(context)!.translate('about'),
-                      ),
-                    ),
-                    ListTile(
                       leading: const Icon(Icons.language),
                       title: Text(
                         AppLocalizations.of(context)!.translate('language'),
@@ -202,6 +196,12 @@ class _SettingsPageState extends State<SettingsPage>
                             child: Text('Português'),
                           ),
                         ],
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      title: Text(
+                        AppLocalizations.of(context)!.translate('about'),
                       ),
                     ),
                     ListTile(
