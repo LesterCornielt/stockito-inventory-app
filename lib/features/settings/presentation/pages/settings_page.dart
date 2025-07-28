@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stockito/l10n/app_localizations.dart';
 import '../../../../main.dart';
 
@@ -221,6 +222,7 @@ class _SettingsPageState extends State<SettingsPage>
                       title: Text(
                         AppLocalizations.of(context)!.translate('logout'),
                       ),
+                      onTap: () => SystemNavigator.pop(),
                     ),
                   ],
                 ),
