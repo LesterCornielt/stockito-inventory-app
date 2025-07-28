@@ -254,7 +254,7 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                     ],
                   ),
                   Text(
-                    '${product.price} CUP',
+                    '${product.price} ${AppLocalizations.of(context)!.translate('currency')}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

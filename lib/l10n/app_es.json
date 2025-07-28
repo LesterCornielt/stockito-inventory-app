@@ -47,5 +47,9 @@
     "dark_mode": "Modo oscuro",
     "language": "Idioma",
     "developed_by": "Desarrollado por Lester Cornielt",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "add_product": "Añadir Producto",
+    "price_invalid": "El precio debe ser un número mayor que 0.",
+    "quantity_invalid": "La cantidad debe ser un número mayor que 0.",
+    "currency": "CUP"
 } 

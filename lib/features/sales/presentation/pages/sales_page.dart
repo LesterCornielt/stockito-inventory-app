@@ -211,7 +211,7 @@ class _ReportsViewState extends State<_ReportsView> {
               Expanded(
                 child: _buildSummaryCard(
                   AppLocalizations.of(context)!.translate('total_sold'),
-                  '${report.totalDailyAmount} CUP',
+                  '${report.totalDailyAmount} ${AppLocalizations.of(context)!.translate('currency')}',
                   Icons.attach_money,
                   isMoney: true,
                 ),
@@ -412,7 +412,7 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
           Expanded(
             child: Text(
-              '${product.pricePerUnit} CUP',
+              '${product.pricePerUnit} ${AppLocalizations.of(context)!.translate('currency')}',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -421,7 +421,7 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
           Expanded(
             child: Text(
-              '${product.totalAmount} CUP',
+              '${product.totalAmount} ${AppLocalizations.of(context)!.translate('currency')}',
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.green.shade600,

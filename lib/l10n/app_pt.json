@@ -47,5 +47,9 @@
     "dark_mode": "Modo escuro",
     "language": "Idioma",
     "developed_by": "Desenvolvido por Lester Cornielt",
-    "logout": "Sair"
+    "logout": "Sair",
+    "add_product": "Adicionar Produto",
+    "price_invalid": "O preço deve ser um número maior que 0.",
+    "quantity_invalid": "A quantidade deve ser um número maior que 0.",
+    "currency": "R$"
 } 
