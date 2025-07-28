@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stockito/l10n/app_localizations.dart';
 
-class ListsPage extends StatelessWidget {
-  const ListsPage({super.key});
+class YourFeaturePage extends StatelessWidget {
+  const YourFeaturePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ListsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)!.translate('lists'),
+                  AppLocalizations.of(context)!.translate('your_feature_title'),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -42,11 +42,12 @@ class ListsPage extends StatelessWidget {
                       Text(
                         AppLocalizations.of(
                           context,
-                        )!.translate('pending_development'),
+                        )!.translate('your_feature_placeholder'),
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),

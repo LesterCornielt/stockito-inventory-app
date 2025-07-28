@@ -182,18 +182,30 @@ class _SettingsPageState extends State<SettingsPage>
                             localeNotifier.value = newLocale;
                           }
                         },
-                        items: const [
+                        items: [
                           DropdownMenuItem(
-                            value: Locale('en'),
-                            child: Text('English'),
+                            value: const Locale('en'),
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.translate('language_en'),
+                            ),
                           ),
                           DropdownMenuItem(
-                            value: Locale('es'),
-                            child: Text('Español'),
+                            value: const Locale('es'),
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.translate('language_es'),
+                            ),
                           ),
                           DropdownMenuItem(
-                            value: Locale('pt'),
-                            child: Text('Português'),
+                            value: const Locale('pt'),
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.translate('language_pt'),
+                            ),
                           ),
                         ],
                       ),

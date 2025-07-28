@@ -10,7 +10,7 @@ import '../../../sales/presentation/pages/sales_page.dart';
 import '../../../products/presentation/bloc/product_bloc.dart';
 import '../../../products/presentation/bloc/product_event.dart';
 import '../../../sales/presentation/bloc/reports_bloc.dart';
-import '../../../lists/presentation/pages/lists_page.dart';
+import '../../../your_feature/presentation/pages/your_feature_page.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 
 class MainNavigationPage extends StatelessWidget {
@@ -218,7 +218,7 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
                 create: (_) => sl<ReportsBloc>(),
                 child: const SalesPage(),
               ),
-              const ListsPage(),
+              const YourFeaturePage(),
               const SettingsPage(),
             ],
           ),
