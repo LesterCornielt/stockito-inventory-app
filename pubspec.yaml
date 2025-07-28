@@ -1,7 +1,7 @@
 name: stockito
 description: A new Flutter project called Stockito.
 publish_to: 'none'
-version: 0.1.0
+version: 0.9.8+8
 
 environment:
   sdk: ^3.8.1

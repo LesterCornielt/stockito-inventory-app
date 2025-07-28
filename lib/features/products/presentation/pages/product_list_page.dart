@@ -53,67 +53,52 @@ class _ProductListView extends StatelessWidget {
               const SizedBox(height: 16),
               // Lista de productos
               Expanded(
-                child: FutureBuilder<bool>(
-                  future: PersistenceService.getShowSampleDialog(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                child: BlocBuilder<ProductBloc, ProductState>(
+                  builder: (context, state) {
+                    if (state is ProductLoading) {
                       return const Center(child: CircularProgressIndicator());
-                    }
-                    final showSampleDialog = snapshot.data!;
-                    return BlocBuilder<ProductBloc, ProductState>(
-                      builder: (context, state) {
-                        if (state is ProductLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (state is ProductsLoaded) {
-                          return _buildProductList(state.products, context);
-                        } else if (state is ProductsEmpty) {
-                          if (state.searchQuery != null &&
-                              state.searchQuery!.isNotEmpty) {
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.translate('no_product_found'),
-                                    style: const TextStyle(fontSize: 16),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else if (showSampleDialog) {
-                            return _SampleDialogCheckbox(
-                              initialValue: showSampleDialog,
-                            );
-                          } else {
-                            return Center(
-                              child: Text(
+                    } else if (state is ProductsLoaded) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductsEmpty) {
+                      if (state.searchQuery != null &&
+                          state.searchQuery!.isNotEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
                                 AppLocalizations.of(
                                   context,
-                                )!.translate('no_products_yet'),
+                                )!.translate('no_product_found'),
                                 style: const TextStyle(fontSize: 16),
                                 textAlign: TextAlign.center,
                               ),
-                            );
-                          }
-                        } else if (state is ProductUpdated) {
-                          return _buildProductList(state.products, context);
-                        } else if (state is ProductCreated) {
-                          return _buildProductList(state.products, context);
-                        } else if (state is ProductOperationLoading) {
-                          return _buildProductList(state.products, context);
-                        } else if (state is ProductError) {
-                          return Center(child: Text(state.message));
-                        } else if (state is ProductDeleted) {
-                          return _buildProductList(state.products, context);
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    );
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.translate('no_products_yet'),
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                    } else if (state is ProductUpdated) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductCreated) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductOperationLoading) {
+                      return _buildProductList(state.products, context);
+                    } else if (state is ProductError) {
+                      return Center(child: Text(state.message));
+                    } else if (state is ProductDeleted) {
+                      return _buildProductList(state.products, context);
+                    }
+                    return const SizedBox.shrink();
                   },
                 ),
               ),
@@ -126,57 +111,6 @@ class _ProductListView extends StatelessWidget {
 }
 
 // Reemplazar _SampleDialogCheckbox por un widget estático
-class _SampleDialogCheckbox extends StatelessWidget {
-  final bool initialValue;
-  const _SampleDialogCheckbox({super.key, required this.initialValue});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.translate('no_products_yet'),
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              context.read<ProductBloc>().add(const PopulateSampleData());
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1976D2),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.translate('load_sample_products'),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Checkbox(
-                value: initialValue,
-                onChanged: (val) async {
-                  if (val == null) return;
-                  await PersistenceService.setShowSampleDialog(val);
-                  // No es necesario hacer setState ni nada, el cambio se reflejará al reiniciar la app
-                },
-              ),
-              Text(AppLocalizations.of(context)!.translate('show_on_startup')),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // Mover esta función fuera de cualquier clase
 Widget _buildProductList(List<Product> products, BuildContext context) {

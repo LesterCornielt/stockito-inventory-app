@@ -8,7 +8,6 @@ import '../../features/products/domain/usecases/delete_product.dart';
 import '../../features/products/domain/usecases/get_all_products.dart';
 import '../../features/products/domain/usecases/search_products.dart';
 import '../../features/products/domain/usecases/update_product.dart';
-import '../../features/sales/domain/usecases/populate_sample_data.dart';
 import '../../features/sales/data/datasources/sale_local_datasource.dart';
 import '../../features/sales/data/repositories/sale_repository_impl.dart';
 import '../../features/sales/domain/repositories/sale_repository.dart';
@@ -35,7 +34,6 @@ Future<void> init() async {
       updateProduct: sl(),
       deleteProduct: sl(),
       searchProducts: sl(),
-      populateSampleData: sl(),
       registerSaleFromStockUpdate: sl(),
     ),
   );
@@ -48,7 +46,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateProduct(sl()));
   sl.registerLazySingleton(() => DeleteProduct(sl()));
   sl.registerLazySingleton(() => SearchProducts(sl()));
-  sl.registerLazySingleton(() => PopulateSampleData(sl()));
   sl.registerLazySingleton(() => CreateSale(sl()));
   sl.registerLazySingleton(() => GetSalesOfDay(sl()));
   sl.registerLazySingleton(() => GetSalesReport(sl(), sl()));

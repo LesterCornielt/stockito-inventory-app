@@ -1,22 +1,19 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/product_model.dart';
-import '../../../../core/utils/sample_data_generator.dart';
 import '../../../../core/database/database_service.dart';
+import '../../domain/entities/product.dart';
 
 abstract class ProductLocalDataSource {
   Future<List<ProductModel>> getAllProducts();
   Future<ProductModel?> getProductById(int id);
   Future<List<ProductModel>> searchProducts(String query);
-  Future<int> createProduct(ProductModel product);
+  Future<ProductModel> createProduct(ProductModel product);
   Future<bool> updateProduct(ProductModel product);
   Future<bool> deleteProduct(int id);
-  Future<void> populateWithSampleData();
 }
 
 class ProductLocalDataSourceImpl implements ProductLocalDataSource {
-  Future<Database> get database async {
-    return await DatabaseService.database;
-  }
+  final Future<Database> database = DatabaseService.database;
 
   @override
   Future<List<ProductModel>> getAllProducts() async {
@@ -58,9 +55,10 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
   }
 
   @override
-  Future<int> createProduct(ProductModel product) async {
+  Future<ProductModel> createProduct(ProductModel product) async {
     final db = await database;
-    return await db.insert('products', product.toMap());
+    final id = await db.insert('products', product.toMap());
+    return ProductModel.fromEntity(product.copyWith(id: id));
   }
 
   @override
@@ -80,24 +78,5 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     final db = await database;
     final count = await db.delete('products', where: 'id = ?', whereArgs: [id]);
     return count > 0;
-  }
-
-  @override
-  Future<void> populateWithSampleData() async {
-    final db = await database;
-
-    // Check if database is already populated
-    final existingProducts = await db.query('products');
-    if (existingProducts.isNotEmpty) {
-      return; // Database already has data
-    }
-
-    // Get sample products
-    final sampleProducts = SampleDataGenerator.getSampleProducts();
-
-    // Insert all sample products
-    for (final product in sampleProducts) {
-      await db.insert('products', product.toMap());
-    }
   }
 }

@@ -14,7 +14,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     Emitter<NavigationState> emit,
   ) {
     emit(NavigationState(currentIndex: event.index));
-    // Guardar el índice de navegación
     PersistenceService.saveNavigationIndex(event.index);
   }
 

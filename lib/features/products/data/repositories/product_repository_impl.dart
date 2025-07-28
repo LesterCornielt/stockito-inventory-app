@@ -39,10 +39,11 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<int> createProduct(Product product) async {
+  Future<Product> createProduct(Product product) async {
     try {
       final productModel = ProductModel.fromEntity(product);
-      return await localDataSource.createProduct(productModel);
+      final newProductModel = await localDataSource.createProduct(productModel);
+      return newProductModel.toEntity();
     } catch (e) {
       throw ProductFailure(message: 'Error al crear producto: $e');
     }
@@ -64,15 +65,6 @@ class ProductRepositoryImpl implements ProductRepository {
       return await localDataSource.deleteProduct(id);
     } catch (e) {
       throw ProductFailure(message: 'Error al eliminar producto: $e');
-    }
-  }
-
-  @override
-  Future<void> populateWithSampleData() async {
-    try {
-      await localDataSource.populateWithSampleData();
-    } catch (e) {
-      throw ProductFailure(message: 'Error al poblar datos de muestra: $e');
     }
   }
 }

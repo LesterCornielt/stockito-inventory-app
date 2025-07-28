@@ -6,8 +6,6 @@ import '../../domain/usecases/delete_product.dart' as delete_use_case;
 import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/search_products.dart' as search_use_case;
 import '../../domain/usecases/update_product.dart' as update_use_case;
-import '../../../sales/domain/usecases/populate_sample_data.dart'
-    as populate_use_case;
 import '../../../sales/domain/usecases/register_sale_from_stock_update.dart';
 import '../../../../core/utils/persistence_service.dart';
 import 'product_event.dart';
@@ -19,7 +17,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final update_use_case.UpdateProduct updateProduct;
   final delete_use_case.DeleteProduct deleteProduct;
   final search_use_case.SearchProducts searchProducts;
-  final populate_use_case.PopulateSampleData populateSampleData;
   final RegisterSaleFromStockUpdate registerSaleFromStockUpdate;
 
   ProductBloc({
@@ -28,7 +25,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     required this.updateProduct,
     required this.deleteProduct,
     required this.searchProducts,
-    required this.populateSampleData,
     required this.registerSaleFromStockUpdate,
   }) : super(const ProductInitial()) {
     on<LoadProducts>(_onLoadProducts);
@@ -37,7 +33,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<UpdateProduct>(_onUpdateProduct);
     on<DeleteProduct>(_onDeleteProduct);
     on<ClearSearch>(_onClearSearch);
-    on<PopulateSampleData>(_onPopulateSampleData);
     on<RegisterSale>(_onRegisterSale);
     on<LoadSavedSearch>(_onLoadSavedSearch);
   }
@@ -136,8 +131,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         updatedAt: now,
       );
 
-      final productId = await createProduct(product);
-      final createdProduct = product.copyWith(id: productId);
+      final createdProduct = await createProduct(product);
 
       // Si hay un estado actual con productos, agregar el nuevo producto a la lista
       if (currentState is ProductsLoaded) {
@@ -295,40 +289,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     // Limpiar la búsqueda guardada
     await PersistenceService.saveLastSearchQuery('');
     add(const LoadProducts());
-  }
-
-  Future<void> _onPopulateSampleData(
-    PopulateSampleData event,
-    Emitter<ProductState> emit,
-  ) async {
-    try {
-      final currentState = state;
-      if (currentState is ProductsLoaded) {
-        emit(
-          ProductOperationLoading(
-            products: currentState.products,
-            operation: 'Poblando datos de muestra...',
-          ),
-        );
-      } else {
-        emit(const ProductLoading());
-      }
-
-      await populateSampleData();
-
-      // Recargar la lista de productos
-      final products = await getAllProducts(NoParams());
-      emit(ProductsLoaded(products: products));
-    } catch (e) {
-      final currentState = state;
-      if (currentState is ProductsLoaded) {
-        emit(
-          ProductError(message: e.toString(), products: currentState.products),
-        );
-      } else {
-        emit(ProductError(message: e.toString()));
-      }
-    }
   }
 
   Future<void> _onRegisterSale(

@@ -60,10 +60,6 @@ class ClearSearch extends ProductEvent {
   const ClearSearch();
 }
 
-class PopulateSampleData extends ProductEvent {
-  const PopulateSampleData();
-}
-
 class RegisterSale extends ProductEvent {
   final int productId;
   final int quantitySold;

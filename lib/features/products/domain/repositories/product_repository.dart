@@ -5,10 +5,9 @@ abstract class ProductRepository {
   Future<List<Product>> getAllProducts();
   Future<Product?> getProductById(int id);
   Future<List<Product>> searchProducts(String query);
-  Future<int> createProduct(Product product);
+  Future<Product> createProduct(Product product);
   Future<bool> updateProduct(Product product);
   Future<bool> deleteProduct(int id);
-  Future<void> populateWithSampleData();
 }
 
 class ProductFailure extends Equatable {

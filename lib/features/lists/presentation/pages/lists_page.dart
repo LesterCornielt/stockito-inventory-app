@@ -13,7 +13,6 @@ class ListsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Pill para el título 'Listas'
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -33,7 +32,6 @@ class ListsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              // Contenido principal
               Expanded(
                 child: Center(
                   child: Column(
@@ -58,25 +56,6 @@ class ListsPage extends StatelessWidget {
           ),
         ),
       ),
-      // floatingActionButton: PhysicalModel(
-      //   color: Colors.transparent,
-      //   elevation: 12,
-      //   shadowColor: Colors.black26,
-      //   shape: BoxShape.circle,
-      //   child: SizedBox(
-      //     width: 72,
-      //     height: 72,
-      //     child: FloatingActionButton(
-      //       onPressed: () {
-      //         // TODO: Implementar creación de nueva lista
-      //       },
-      //       backgroundColor: const Color(0xFF1976D2),
-      //       shape: const CircleBorder(),
-      //       elevation: 0,
-      //       child: const Icon(Icons.add, color: Colors.white, size: 40),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
