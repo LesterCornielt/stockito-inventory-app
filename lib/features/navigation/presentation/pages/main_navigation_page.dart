@@ -290,7 +290,7 @@ class _CustomBottomNavBar extends StatelessWidget {
       ),
       _NavBarItemData(
         Icons.list,
-        AppLocalizations.of(context)!.translate('lists'),
+        AppLocalizations.of(context)!.translate('your_feature'),
       ),
       _NavBarItemData(
         Icons.settings,
