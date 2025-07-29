@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stockito/core/utils/persistence_service.dart';
+import 'package:stockito/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:stockito/l10n/app_localizations.dart';
+
 import 'core/di/injection_container.dart' as di;
 import 'features/navigation/presentation/pages/main_navigation_page.dart';
-import 'l10n/app_localizations.dart';
 
 final ValueNotifier<ThemeMode> themeModeNotifier = ValueNotifier(
   ThemeMode.light,
@@ -13,6 +17,7 @@ final ValueNotifier<Locale> localeNotifier = ValueNotifier(const Locale('en'));
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+  await PersistenceService.init();
   runApp(const MyApp());
 }
 

@@ -5,7 +5,6 @@ import '../../presentation/bloc/product_bloc.dart';
 import '../../presentation/bloc/product_event.dart';
 import '../../presentation/bloc/product_state.dart';
 import '../../domain/entities/product.dart';
-import '../../../../core/utils/persistence_service.dart';
 
 class ProductListPage extends StatelessWidget {
   const ProductListPage({super.key});

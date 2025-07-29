@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/product_model.dart';
 import '../../../../core/database/database_service.dart';
-import '../../domain/entities/product.dart';
 
 abstract class ProductLocalDataSource {
   Future<List<ProductModel>> getAllProducts();

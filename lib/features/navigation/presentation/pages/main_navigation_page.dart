@@ -20,7 +20,9 @@ class MainNavigationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => sl<NavigationBloc>()),
+        BlocProvider(
+          create: (_) => sl<NavigationBloc>()..add(const LoadSavedNavigation()),
+        ),
         BlocProvider(
           create: (_) => sl<ProductBloc>()
             ..add(const LoadProducts())
@@ -32,27 +34,8 @@ class MainNavigationPage extends StatelessWidget {
   }
 }
 
-class _MainNavigationView extends StatefulWidget {
+class _MainNavigationView extends StatelessWidget {
   const _MainNavigationView();
-
-  @override
-  State<_MainNavigationView> createState() => _MainNavigationViewState();
-}
-
-class _MainNavigationViewState extends State<_MainNavigationView> {
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   void _showAddProductDialog(BuildContext context, ProductBloc productBloc) {
     final nameController = TextEditingController();
@@ -187,28 +170,12 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
-        // Cargar el estado guardado al inicializar
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.read<NavigationBloc>().add(const LoadSavedNavigation());
-        });
-
-        // Sincronizar el PageController con el estado actual
-        if (_pageController.hasClients &&
-            _pageController.page?.round() != state.currentIndex) {
-          _pageController.animateToPage(
-            state.currentIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-
         return Scaffold(
           body: PageView(
-            controller: _pageController,
+            controller: state.pageController,
             onPageChanged: (index) {
-              context.read<NavigationBloc>().add(NavigationChanged(index));
+              context.read<NavigationBloc>().add(PageChanged(index));
               if (index == 0) {
-                // Limpiar búsqueda al volver a la página de productos
                 context.read<ProductBloc>().add(const ClearSearch());
               }
             },
@@ -252,9 +219,8 @@ class _MainNavigationViewState extends State<_MainNavigationView> {
           bottomNavigationBar: _CustomBottomNavBar(
             currentIndex: state.currentIndex,
             onTap: (index) {
-              context.read<NavigationBloc>().add(NavigationChanged(index));
+              context.read<NavigationBloc>().add(TabChanged(index));
               if (index == 0) {
-                // Limpiar búsqueda al volver a la página de productos
                 context.read<ProductBloc>().add(const ClearSearch());
               }
             },
