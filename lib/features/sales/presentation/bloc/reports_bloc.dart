@@ -10,11 +10,49 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
   final UpdateSale updateSale;
 
   ReportsBloc({required this.getSalesReport, required this.updateSale})
-    : super(ReportsInitial()) {
+    : super(const ReportsInitial()) {
     on<LoadDailyReport>(_onLoadDailyReport);
     on<LoadTodayReport>(_onLoadTodayReport);
     on<EditSale>(_onEditSale);
     on<EditProductSales>(_onEditProductSales);
+    on<StartEditingProduct>(_onStartEditingProduct);
+    on<FinishEditingProduct>(_onFinishEditingProduct);
+  }
+
+  void _onStartEditingProduct(
+    StartEditingProduct event,
+    Emitter<ReportsState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is ReportsLoaded) {
+      emit(
+        ReportsLoaded(
+          currentState.report,
+          editingIndex: event.index,
+          editingField: event.field,
+        ),
+      );
+    } else if (currentState is ReportsEditing) {
+      emit(
+        ReportsEditing(
+          currentState.report,
+          editingIndex: event.index,
+          editingField: event.field,
+        ),
+      );
+    }
+  }
+
+  void _onFinishEditingProduct(
+    FinishEditingProduct event,
+    Emitter<ReportsState> emit,
+  ) {
+    final currentState = state;
+    if (currentState is ReportsLoaded) {
+      emit(ReportsLoaded(currentState.report));
+    } else if (currentState is ReportsEditing) {
+      emit(ReportsEditing(currentState.report));
+    }
   }
 
   Future<void> _onLoadDailyReport(

@@ -42,3 +42,17 @@ class EditProductSales extends ReportsEvent {
   @override
   List<Object?> get props => [productName, newQuantity];
 }
+
+class StartEditingProduct extends ReportsEvent {
+  final int index;
+  final String field; // 'name' o 'quantity'
+
+  const StartEditingProduct({required this.index, required this.field});
+
+  @override
+  List<Object?> get props => [index, field];
+}
+
+class FinishEditingProduct extends ReportsEvent {
+  const FinishEditingProduct();
+}

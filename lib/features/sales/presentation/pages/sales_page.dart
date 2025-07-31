@@ -25,18 +25,8 @@ class SalesPage extends StatelessWidget {
   }
 }
 
-class _ReportsView extends StatefulWidget {
+class _ReportsView extends StatelessWidget {
   const _ReportsView();
-
-  @override
-  State<_ReportsView> createState() => _ReportsViewState();
-}
-
-class _ReportsViewState extends State<_ReportsView> {
-  int? editingIndex;
-  String? editingField; // 'name' o 'quantity'
-  final TextEditingController quantityController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +53,12 @@ class _ReportsViewState extends State<_ReportsView> {
                       if (state is ReportsLoading) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is ReportsLoaded) {
-                        return _buildReportContent(context, state.report);
+                        return _buildReportContent(
+                          context,
+                          state.report,
+                          state.editingIndex,
+                          state.editingField,
+                        );
                       } else if (state is ReportsEmpty) {
                         return _buildEmptyState(context, state.date);
                       } else if (state is ReportsError) {
@@ -155,12 +150,24 @@ class _ReportsViewState extends State<_ReportsView> {
     );
   }
 
-  Widget _buildReportContent(BuildContext context, DailySalesReport report) {
+  Widget _buildReportContent(
+    BuildContext context,
+    DailySalesReport report,
+    int? editingIndex,
+    String? editingField,
+  ) {
     return Column(
       children: [
         _buildDailySummary(context, report),
         const SizedBox(height: 16),
-        Expanded(child: _buildProductsList(context, report.productReports)),
+        Expanded(
+          child: _buildProductsList(
+            context,
+            report.productReports,
+            editingIndex,
+            editingField,
+          ),
+        ),
       ],
     );
   }
@@ -202,6 +209,7 @@ class _ReportsViewState extends State<_ReportsView> {
             children: [
               Expanded(
                 child: _buildSummaryCard(
+                  context,
                   AppLocalizations.of(context)!.translate('products_sold'),
                   '${report.productReports.length}',
                   Icons.inventory,
@@ -210,6 +218,7 @@ class _ReportsViewState extends State<_ReportsView> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildSummaryCard(
+                  context,
                   AppLocalizations.of(context)!.translate('total_sold'),
                   '${report.totalDailyAmount} ${AppLocalizations.of(context)!.translate('currency')}',
                   Icons.attach_money,
@@ -224,6 +233,7 @@ class _ReportsViewState extends State<_ReportsView> {
   }
 
   Widget _buildSummaryCard(
+    BuildContext context,
     String title,
     String value,
     IconData icon, {
@@ -263,7 +273,12 @@ class _ReportsViewState extends State<_ReportsView> {
     );
   }
 
-  Widget _buildProductsList(BuildContext context, List<SalesReport> products) {
+  Widget _buildProductsList(
+    BuildContext context,
+    List<SalesReport> products,
+    int? editingIndex,
+    String? editingField,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -330,7 +345,13 @@ class _ReportsViewState extends State<_ReportsView> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
-                return _buildProductItem(context, product, index);
+                return _buildProductItem(
+                  context,
+                  product,
+                  index,
+                  editingIndex,
+                  editingField,
+                );
               },
             ),
           ),
@@ -343,9 +364,20 @@ class _ReportsViewState extends State<_ReportsView> {
     BuildContext context,
     SalesReport product,
     int index,
+    int? editingIndex,
+    String? editingField,
   ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    final isEditingName = editingIndex == index && editingField == 'name';
+    final isEditingQuantity =
+        editingIndex == index && editingField == 'quantity';
+
+    final nameController = TextEditingController(text: product.productName);
+    final quantityController = TextEditingController(
+      text: product.totalQuantity.toString(),
+    );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -359,7 +391,7 @@ class _ReportsViewState extends State<_ReportsView> {
         children: [
           Expanded(
             flex: 3,
-            child: editingIndex == index && editingField == 'name'
+            child: isEditingName
                 ? TextField(
                     controller: nameController,
                     autofocus: true,
@@ -371,10 +403,16 @@ class _ReportsViewState extends State<_ReportsView> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    onSubmitted: (value) => _finishEditingName(value),
+                    onSubmitted: (value) {
+                      _finishEditingName(context, value, index);
+                    },
                   )
                 : GestureDetector(
-                    onTap: () => _startEditing(index, product, 'name'),
+                    onTap: () {
+                      context.read<ReportsBloc>().add(
+                        StartEditingProduct(index: index, field: 'name'),
+                      );
+                    },
                     child: Text(
                       product.productName,
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -384,7 +422,7 @@ class _ReportsViewState extends State<_ReportsView> {
                   ),
           ),
           Expanded(
-            child: editingIndex == index && editingField == 'quantity'
+            child: isEditingQuantity
                 ? TextField(
                     controller: quantityController,
                     keyboardType: TextInputType.number,
@@ -397,10 +435,16 @@ class _ReportsViewState extends State<_ReportsView> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    onSubmitted: (value) => _finishEditingQuantity(value),
+                    onSubmitted: (value) {
+                      _finishEditingQuantity(context, value, index, product);
+                    },
                   )
                 : GestureDetector(
-                    onTap: () => _startEditing(index, product, 'quantity'),
+                    onTap: () {
+                      context.read<ReportsBloc>().add(
+                        StartEditingProduct(index: index, field: 'quantity'),
+                      );
+                    },
                     child: Text(
                       '${product.totalQuantity}',
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -521,35 +565,16 @@ class _ReportsViewState extends State<_ReportsView> {
     }
   }
 
-  void _startEditing(int index, SalesReport product, String field) {
-    setState(() {
-      editingIndex = index;
-      editingField = field;
-      if (field == 'quantity') {
-        quantityController.text = product.totalQuantity.toString();
-        Future.delayed(const Duration(milliseconds: 100), () {
-          quantityController.selection = TextSelection.fromPosition(
-            TextPosition(offset: quantityController.text.length),
-          );
-        });
-      } else if (field == 'name') {
-        nameController.text = product.productName;
-        Future.delayed(const Duration(milliseconds: 100), () {
-          nameController.selection = TextSelection.fromPosition(
-            TextPosition(offset: nameController.text.length),
-          );
-        });
-      }
-    });
-  }
-
-  void _finishEditingQuantity(String value) {
-    if (editingIndex == null) return;
+  void _finishEditingQuantity(
+    BuildContext context,
+    String value,
+    int index,
+    SalesReport product,
+  ) {
     final newQuantity = int.tryParse(value);
     if (newQuantity != null && newQuantity >= 0) {
       final state = context.read<ReportsBloc>().state;
       if (state is ReportsLoaded) {
-        final product = state.report.productReports[editingIndex!];
         context.read<ReportsBloc>().add(
           EditProductSales(
             productName: product.productName,
@@ -566,15 +591,10 @@ class _ReportsViewState extends State<_ReportsView> {
         ),
       );
     }
-    setState(() {
-      editingIndex = null;
-      editingField = null;
-      quantityController.clear();
-    });
+    context.read<ReportsBloc>().add(const FinishEditingProduct());
   }
 
-  void _finishEditingName(String value) async {
-    if (editingIndex == null) return;
+  void _finishEditingName(BuildContext context, String value, int index) async {
     final newName = value.trim();
     if (newName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -584,11 +604,12 @@ class _ReportsViewState extends State<_ReportsView> {
           ),
         ),
       );
+      context.read<ReportsBloc>().add(const FinishEditingProduct());
       return;
     }
     final reportsState = context.read<ReportsBloc>().state;
     if (reportsState is ReportsLoaded) {
-      final product = reportsState.report.productReports[editingIndex!];
+      final product = reportsState.report.productReports[index];
       final productBloc = context.read<ProductBloc>();
       final productState = productBloc.state;
 
@@ -619,17 +640,6 @@ class _ReportsViewState extends State<_ReportsView> {
         }
       }
     }
-    setState(() {
-      editingIndex = null;
-      editingField = null;
-      nameController.clear();
-    });
-  }
-
-  @override
-  void dispose() {
-    quantityController.dispose();
-    nameController.dispose();
-    super.dispose();
+    context.read<ReportsBloc>().add(const FinishEditingProduct());
   }
 }
