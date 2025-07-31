@@ -224,10 +224,10 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                         icon: const Icon(Icons.remove, size: 16),
                         style: IconButton.styleFrom(
                           backgroundColor: product.stock > 0
-                              ? Colors.red.shade100
+                              ? Colors.red
                               : Colors.grey.shade200,
                           foregroundColor: product.stock > 0
-                              ? Colors.red.shade700
+                              ? Colors.white
                               : Colors.grey.shade500,
                           minimumSize: const Size(24, 24),
                         ),
@@ -245,8 +245,8 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
                         },
                         icon: const Icon(Icons.add, size: 16),
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.green.shade100,
-                          foregroundColor: Colors.green.shade700,
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
                           minimumSize: const Size(24, 24),
                         ),
                       ),
