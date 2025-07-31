@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 class DatabaseService {
   static Database? _database;
-  static const int _version = 4; // Incrementar versión para forzar migración
+  static const int _version = 4;
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -22,7 +22,6 @@ class DatabaseService {
   }
 
   static Future<void> _onCreate(Database db, int version) async {
-    // Crear tabla de productos
     await db.execute('''
       CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,7 +33,6 @@ class DatabaseService {
       )
     ''');
 
-    // Crear tabla de ventas
     await db.execute('''
       CREATE TABLE sales(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,7 +52,6 @@ class DatabaseService {
     int newVersion,
   ) async {
     if (oldVersion < 4) {
-      // Migrar la columna price de REAL a INTEGER
       await db.execute('''
         CREATE TABLE products_new(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,18 +63,15 @@ class DatabaseService {
         )
       ''');
 
-      // Copiar datos existentes, convirtiendo precios a enteros
       await db.execute('''
         INSERT INTO products_new (id, name, price, stock, created_at, updated_at)
         SELECT id, name, CAST(price AS INTEGER), stock, created_at, updated_at
         FROM products
       ''');
 
-      // Eliminar tabla antigua y renombrar la nueva
       await db.execute('DROP TABLE products');
       await db.execute('ALTER TABLE products_new RENAME TO products');
 
-      // Migrar la tabla de ventas
       await db.execute('''
         CREATE TABLE sales_new(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -90,14 +84,12 @@ class DatabaseService {
         )
       ''');
 
-      // Copiar datos existentes, convirtiendo precios a enteros
       await db.execute('''
         INSERT INTO sales_new (id, product_id, product_name, quantity, price_per_unit, total_amount, date)
         SELECT id, product_id, product_name, quantity, CAST(price_per_unit AS INTEGER), CAST(total_amount AS INTEGER), date
         FROM sales
       ''');
 
-      // Eliminar tabla antigua y renombrar la nueva
       await db.execute('DROP TABLE sales');
       await db.execute('ALTER TABLE sales_new RENAME TO sales');
     }

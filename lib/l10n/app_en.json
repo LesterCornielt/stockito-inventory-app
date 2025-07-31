@@ -52,5 +52,6 @@
     "add_product": "Add Product",
     "price_invalid": "Price must be a number greater than 0.",
     "quantity_invalid": "Quantity must be a number greater than 0.",
-    "currency": "USD"
+    "currency": "USD",
+    "sale_not_found": "Sale not found"
 } 

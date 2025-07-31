@@ -46,6 +46,6 @@ class PersistenceService {
 
   static Future<Locale> getLocale() async {
     final languageCode = _prefs?.getString(_localeKey);
-    return Locale(languageCode ?? 'en');
+    return Locale(languageCode ?? 'es');
   }
 }

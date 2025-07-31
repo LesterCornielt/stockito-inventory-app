@@ -63,7 +63,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       return;
     }
 
-    // Guardar la búsqueda
     await PersistenceService.saveLastSearchQuery(event.query);
 
     try {
@@ -133,7 +132,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final createdProduct = await createProduct(product);
 
-      // Si hay un estado actual con productos, agregar el nuevo producto a la lista
       if (currentState is ProductsLoaded) {
         final updatedProducts = [...currentState.products, createdProduct];
         emit(
@@ -144,7 +142,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           ),
         );
       } else {
-        // Si no hay estado actual, recargar desde la base de datos
         final products = await getAllProducts(NoParams());
         emit(ProductCreated(products: products, product: createdProduct));
       }
@@ -237,7 +234,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
       final success = await deleteProduct(event.productId);
       if (success) {
-        // Actualizar la lista removiendo el producto eliminado
         if (currentState is ProductsLoaded) {
           final updatedProducts = currentState.products
               .where((product) => product.id != event.productId)
@@ -254,7 +250,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             );
           }
         } else {
-          // Si no hay estado actual, recargar desde la base de datos
           final products = await getAllProducts(NoParams());
           if (products.isEmpty) {
             emit(const ProductsEmpty());
@@ -286,7 +281,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     ClearSearch event,
     Emitter<ProductState> emit,
   ) async {
-    // Limpiar la búsqueda guardada
     await PersistenceService.saveLastSearchQuery('');
     add(const LoadProducts());
   }
@@ -298,11 +292,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       await registerSaleFromStockUpdate(event.productId, event.quantitySold);
 
-      // Después de registrar la venta y actualizar el stock,
-      // es importante reflejar el cambio en la UI
       final currentState = state;
       if (currentState is ProductsLoaded) {
-        // Obtener el producto actualizado desde la base de datos
         final updatedProduct = await getAllProducts(NoParams());
         final product = updatedProduct.firstWhere(
           (p) => p.id == event.productId,
@@ -324,7 +315,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           ),
         );
       } else {
-        // Si no hay estado actual, recargar desde la base de datos
         final products = await getAllProducts(NoParams());
         emit(ProductsLoaded(products: products));
       }

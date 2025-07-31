@@ -41,6 +41,7 @@
     "enter_valid_quantity": "Por favor, introduce una cantidad válida",
     "name_not_empty": "El nombre no puede estar vacío",
     "product_not_found": "Producto no encontrado",
+    "sale_not_found": "Venta no encontrada",
     "language_en": "Inglés",
     "language_es": "Español",
     "language_pt": "Portugués",

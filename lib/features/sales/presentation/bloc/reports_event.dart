@@ -45,7 +45,7 @@ class EditProductSales extends ReportsEvent {
 
 class StartEditingProduct extends ReportsEvent {
   final int index;
-  final String field; // 'name' o 'quantity'
+  final String field;
 
   const StartEditingProduct({required this.index, required this.field});
 

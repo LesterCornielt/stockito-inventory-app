@@ -27,10 +27,8 @@ class _ProductListView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Barra de búsqueda en la parte superior
               _SearchBar(),
               const SizedBox(height: 24),
-              // Pill para el título 'Productos'
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -50,7 +48,6 @@ class _ProductListView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              // Lista de productos
               Expanded(
                 child: BlocBuilder<ProductBloc, ProductState>(
                   builder: (context, state) {
@@ -109,11 +106,7 @@ class _ProductListView extends StatelessWidget {
   }
 }
 
-// Reemplazar _SampleDialogCheckbox por un widget estático
-
-// Mover esta función fuera de cualquier clase
 Widget _buildProductList(List<Product> products, BuildContext context) {
-  // Ordenar productos alfabéticamente por nombre (A-Z)
   final sortedProducts = List<Product>.from(products)
     ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
   if (sortedProducts.isEmpty) {
@@ -269,7 +262,6 @@ Widget _buildProductList(List<Product> products, BuildContext context) {
   );
 }
 
-// Mover también _showEditDialog y _showDeleteDialog fuera de la clase
 void _showEditDialog(BuildContext context, Product product, ProductBloc bloc) {
   final nameController = TextEditingController(text: product.name);
   final priceController = TextEditingController(text: product.price.toString());

@@ -107,7 +107,9 @@ class _ReportsView extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
+                border: Border.all(
+                  color: colorScheme.outline.withValues(alpha: 0.5),
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -247,7 +249,7 @@ class _ReportsView extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -286,14 +288,14 @@ class _ReportsView extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -384,7 +386,7 @@ class _ReportsView extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         border: Border(
-          bottom: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+          bottom: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
         ),
       ),
       child: Row(
@@ -488,20 +490,20 @@ class _ReportsView extends StatelessWidget {
           Icon(
             Icons.analytics_outlined,
             size: 80,
-            color: colorScheme.onSurface.withOpacity(0.4),
+            color: colorScheme.onSurface.withValues(alpha: 0.4),
           ),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.translate('no_sales_registered'),
             style: theme.textTheme.headlineSmall?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.8),
+              color: colorScheme.onSurface.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             '${AppLocalizations.of(context)!.translate('for_date')} ${DateFormat('dd/MM/yyyy').format(date)}',
             style: theme.textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -512,6 +514,18 @@ class _ReportsView extends StatelessWidget {
   Widget _buildErrorState(BuildContext context, String message) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    String displayMessage;
+    if (message == 'sale_not_found') {
+      displayMessage = AppLocalizations.of(
+        context,
+      )!.translate('sale_not_found');
+    } else if (message == 'product_not_found') {
+      displayMessage = AppLocalizations.of(
+        context,
+      )!.translate('product_not_found');
+    } else {
+      displayMessage = message;
+    }
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -519,7 +533,7 @@ class _ReportsView extends StatelessWidget {
           Icon(
             Icons.error_outline,
             size: 80,
-            color: colorScheme.error.withOpacity(0.8),
+            color: colorScheme.error.withValues(alpha: 0.8),
           ),
           const SizedBox(height: 16),
           Text(
@@ -530,9 +544,9 @@ class _ReportsView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            message,
+            displayMessage,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),

@@ -23,10 +23,8 @@ import '../../features/navigation/presentation/bloc/navigation_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Database
-  await DatabaseService.database; // Inicializar la base de datos
+  await DatabaseService.database;
 
-  // Bloc
   sl.registerFactory(
     () => ProductBloc(
       getAllProducts: sl(),
@@ -40,7 +38,6 @@ Future<void> init() async {
   sl.registerFactory(() => ReportsBloc(getSalesReport: sl(), updateSale: sl()));
   sl.registerFactory(() => NavigationBloc());
 
-  // Use cases
   sl.registerLazySingleton(() => GetAllProducts(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
   sl.registerLazySingleton(() => UpdateProduct(sl()));
@@ -59,13 +56,11 @@ Future<void> init() async {
     () => UpdateSale(saleRepository: sl(), productRepository: sl()),
   );
 
-  // Repository
   sl.registerLazySingleton<ProductRepository>(
     () => ProductRepositoryImpl(sl()),
   );
   sl.registerLazySingleton<SaleRepository>(() => SaleRepositoryImpl(sl()));
 
-  // Data sources
   sl.registerLazySingleton<ProductLocalDataSource>(
     () => ProductLocalDataSourceImpl(),
   );

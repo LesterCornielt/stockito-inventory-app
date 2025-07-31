@@ -58,19 +58,16 @@ class GetSalesReport {
     final sales = await saleRepository.getSalesOfDay(day);
     final products = await productRepository.getAllProducts();
 
-    // Mapear productId a nombre actualizado
     final Map<int, String> productIdToName = {
       for (final p in products) p.id!: p.name,
     };
 
-    // Agrupar ventas por productId
     final Map<int, List<Sale>> salesByProductId = {};
     for (final sale in sales) {
       salesByProductId.putIfAbsent(sale.productId, () => []);
       salesByProductId[sale.productId]!.add(sale);
     }
 
-    // Crear reportes por producto
     final List<SalesReport> productReports = [];
     final List<IndividualSaleReport> individualSales = [];
     int totalDailyAmount = 0;
@@ -101,7 +98,6 @@ class GetSalesReport {
       totalDailyAmount += totalAmount;
     }
 
-    // Crear lista de ventas individuales
     for (final sale in sales) {
       final productName = productIdToName[sale.productId] ?? sale.productName;
       individualSales.add(

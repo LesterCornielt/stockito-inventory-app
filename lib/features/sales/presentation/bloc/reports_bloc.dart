@@ -4,7 +4,6 @@ import 'reports_state.dart';
 import '../../domain/usecases/get_sales_report.dart';
 import '../../domain/usecases/update_sale.dart';
 
-// BLoC
 class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
   final GetSalesReport getSalesReport;
   final UpdateSale updateSale;
@@ -88,7 +87,6 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
 
         await updateSale(event.saleId, event.newQuantity);
 
-        // Recargar el reporte actual
         final report = await getSalesReport(currentState.report.date);
         if (report.individualSales.isEmpty) {
           emit(ReportsEmpty(report.date));
@@ -96,6 +94,10 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
           emit(ReportsLoaded(report));
         }
       }
+    } on SaleNotFoundException {
+      emit(const ReportsError('sale_not_found'));
+    } on ProductNotFoundException {
+      emit(const ReportsError('product_not_found'));
     } catch (e) {
       emit(ReportsError(e.toString()));
     }
@@ -110,10 +112,8 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
       if (currentState is ReportsLoaded) {
         emit(ReportsEditing(currentState.report));
 
-        // Obtener todas las ventas del día
         final sales = await getSalesReport(currentState.report.date);
 
-        // Encontrar las ventas del producto específico
         final productSales = sales.individualSales
             .where((sale) => sale.productName == event.productName)
             .toList();
@@ -122,23 +122,18 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
           throw Exception('No se encontraron ventas para este producto');
         }
 
-        // Si la nueva cantidad es 0, eliminar todas las ventas del producto
         if (event.newQuantity == 0) {
           for (final sale in productSales) {
             await updateSale(sale.saleId, 0);
           }
         } else {
-          // Simplificar: actualizar solo la primera venta con la nueva cantidad total
-          // y eliminar las demás
           await updateSale(productSales.first.saleId, event.newQuantity);
 
-          // Eliminar las ventas adicionales si existen
           for (int i = 1; i < productSales.length; i++) {
             await updateSale(productSales[i].saleId, 0);
           }
         }
 
-        // Recargar el reporte actual
         final report = await getSalesReport(currentState.report.date);
         if (report.individualSales.isEmpty) {
           emit(ReportsEmpty(report.date));

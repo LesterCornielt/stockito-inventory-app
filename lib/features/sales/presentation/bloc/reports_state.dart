@@ -12,20 +12,17 @@ abstract class ReportsState extends Equatable {
 }
 
 class ReportsInitial extends ReportsState {
-  const ReportsInitial({int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsInitial({super.editingIndex, super.editingField});
 }
 
 class ReportsLoading extends ReportsState {
-  const ReportsLoading({int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsLoading({super.editingIndex, super.editingField});
 }
 
 class ReportsLoaded extends ReportsState {
   final DailySalesReport report;
 
-  const ReportsLoaded(this.report, {int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsLoaded(this.report, {super.editingIndex, super.editingField});
 
   @override
   List<Object?> get props => [report, editingIndex, editingField];
@@ -34,8 +31,7 @@ class ReportsLoaded extends ReportsState {
 class ReportsEmpty extends ReportsState {
   final DateTime date;
 
-  const ReportsEmpty(this.date, {int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsEmpty(this.date, {super.editingIndex, super.editingField});
 
   @override
   List<Object?> get props => [date, editingIndex, editingField];
@@ -44,8 +40,7 @@ class ReportsEmpty extends ReportsState {
 class ReportsError extends ReportsState {
   final String message;
 
-  const ReportsError(this.message, {int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsError(this.message, {super.editingIndex, super.editingField});
 
   @override
   List<Object?> get props => [message, editingIndex, editingField];
@@ -54,8 +49,7 @@ class ReportsError extends ReportsState {
 class ReportsEditing extends ReportsState {
   final DailySalesReport report;
 
-  const ReportsEditing(this.report, {int? editingIndex, String? editingField})
-    : super(editingIndex: editingIndex, editingField: editingField);
+  const ReportsEditing(this.report, {super.editingIndex, super.editingField});
 
   @override
   List<Object?> get props => [report, editingIndex, editingField];

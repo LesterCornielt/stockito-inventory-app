@@ -236,13 +236,6 @@ class _CustomBottomNavBar extends StatelessWidget {
   final ValueChanged<int> onTap;
   const _CustomBottomNavBar({required this.currentIndex, required this.onTap});
 
-  static const _items = [
-    _NavBarItemData(Icons.inventory, 'Productos'),
-    _NavBarItemData(Icons.analytics, 'Ventas'),
-    _NavBarItemData(Icons.list, 'Listas'),
-    _NavBarItemData(Icons.settings, 'Opciones'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final items = [
@@ -264,25 +257,21 @@ class _CustomBottomNavBar extends StatelessWidget {
       ),
     ];
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 24,
-        right: 24,
-        bottom: 32,
-      ), // Más separación inferior
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 32),
       child: PhysicalModel(
         color: Colors.transparent,
         elevation: 12,
         borderRadius: BorderRadius.circular(32),
         shadowColor: Colors.black12,
         child: Container(
-          height: 72, // Un poco más alto para mejor centrado
+          height: 72,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(32),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center, // Centrado vertical
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: List.generate(items.length, (index) {
               final item = items[index];
               final isSelected = index == currentIndex;
@@ -296,7 +285,7 @@ class _CustomBottomNavBar extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(
                       vertical: 10,
                       horizontal: 6,
-                    ), // Centrado
+                    ),
                     decoration: isSelected
                         ? BoxDecoration(
                             color: Theme.of(context).colorScheme.primary
