@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stockito/core/utils/persistence_service.dart';
-import 'package:stockito/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:stockito/l10n/app_localizations.dart';
 
 import 'core/di/injection_container.dart' as di;

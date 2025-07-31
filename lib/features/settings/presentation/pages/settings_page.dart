@@ -3,66 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:stockito/l10n/app_localizations.dart';
 import '../../../../main.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _rotationAnimation;
-  late final Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    // Primero inicializamos el controlador
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    // Luego inicializamos todas las animaciones
-    _rotationAnimation = Tween<double>(begin: 0, end: 180).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.elasticOut),
-      ),
-    );
-
-    _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: 1.0,
-          end: 0.8,
-        ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 40.0,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(
-          begin: 0.8,
-          end: 1.0,
-        ).chain(CurveTween(curve: Curves.easeInOut)),
-        weight: 60.0,
-      ),
-    ]).animate(_controller);
-
-    // Finalmente, establecemos el valor inicial si es necesario
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && themeModeNotifier.value == ThemeMode.dark) {
-        _controller.value = 1.0;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,29 +42,45 @@ class _SettingsPageState extends State<SettingsPage>
                       builder: (context, themeMode, child) {
                         final isDark = themeMode == ThemeMode.dark;
                         return SwitchListTile(
-                          secondary: AnimatedBuilder(
-                            animation: _controller,
-                            builder: (context, child) {
-                              return Transform.scale(
-                                scale: _scaleAnimation.value,
-                                child: Transform.rotate(
-                                  angle:
-                                      _rotationAnimation.value * 3.14159 / 180,
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    child: Icon(
-                                      Icons.brightness_6,
-                                      color: isDark
-                                          ? Theme.of(
-                                              context,
-                                            ).colorScheme.primary
-                                          : Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                                .withOpacity(0.7),
-                                    ),
-                                  ),
+                          secondary: TweenAnimationBuilder<double>(
+                            tween: Tween<double>(
+                              begin: 0,
+                              end: isDark ? 180 : 0,
+                            ),
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.elasticOut,
+                            builder: (context, rotation, child) {
+                              return TweenAnimationBuilder<double>(
+                                tween: Tween<double>(
+                                  begin: 1.0,
+                                  end: isDark ? 1.0 : 0.8,
                                 ),
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                                builder: (context, scale, child) {
+                                  return Transform.scale(
+                                    scale: scale,
+                                    child: Transform.rotate(
+                                      angle: rotation * 3.14159 / 180,
+                                      child: AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 500,
+                                        ),
+                                        child: Icon(
+                                          Icons.brightness_6,
+                                          color: isDark
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                              : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    .withOpacity(0.7),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -159,11 +117,6 @@ class _SettingsPageState extends State<SettingsPage>
                           value: isDark,
                           activeColor: Theme.of(context).colorScheme.primary,
                           onChanged: (value) {
-                            if (value) {
-                              _controller.forward();
-                            } else {
-                              _controller.reverse();
-                            }
                             themeModeNotifier.value = value
                                 ? ThemeMode.dark
                                 : ThemeMode.light;
