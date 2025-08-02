@@ -1,5 +1,11 @@
 # Stockito
 
+> ⚠️ **Not your language?**
+>
+> This README is in English. If you prefer another language, switch to the corresponding branch:
+> - Spanish: `main`
+> - Portuguese: `docs/portuguese-readme`
+
 **Current status:** v1.0.0
 
 Stockito is an inventory and sales application developed in Flutter, designed for small businesses and entrepreneurs. It allows you to manage products, register sales, and view daily reports in a simple and efficient way. Additionally, it is highly customizable to fit the specific needs of your business. You can add a specific feature in the your_feature view according to your requirements.
