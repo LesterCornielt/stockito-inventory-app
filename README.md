@@ -70,7 +70,7 @@ Stockito é um aplicativo de inventário e vendas desenvolvido em Flutter, pensa
 
 ## 🚀 Instalação e Execução
 
-1. Baixe a versão mais recente do APK em [Releases](https://github.com/LesterCornielt/stockito-inventory-app/releases/latest/download/stockito.apk).
+1. Baixe a versão mais recente do APK em [Releases](https://github.com/LesterCornielt/stockito-inventory-app/releases/download/v1.0.0/Stockito.v1.0.0.apk).
 2. Instale no seu dispositivo Android.
 3. Ou, siga estes passos para compilar a partir do código-fonte:
    ```sh
