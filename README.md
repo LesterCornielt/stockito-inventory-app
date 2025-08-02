@@ -34,6 +34,7 @@ Stockito es una aplicación de inventario y ventas desarrollada en Flutter, pens
 - Navegación y estado persistente entre sesiones
 - Interfaz moderna y responsiva
 - Soporte multilenguaje (español, inglés, portugués)
+- Modo oscuro disponible en todas las funcionalidades
 
 <p>
   <img src="screenshots/light_mode_spanish/settings_page.jpg" alt="Página de configuración" width="150"/>
