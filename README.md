@@ -1,117 +1,117 @@
 # Stockito
 
-**Estado actual:** v1.0.0
+**Current status:** v1.0.0
 
-Stockito es una aplicación de inventario y ventas desarrollada en Flutter, pensada para pequeños negocios y emprendedores. Permite gestionar productos, registrar ventas y visualizar reportes diarios de manera sencilla y eficiente. Además, es altamente personalizable para adaptarse a las necesidades de un negocio específico. Puedes agregar una feature específica en la vista de your_feature según los requerimientos de tu emprendimiento.
-
----
-
-## 📱 Características principales
-
-### 1. Gestión de productos
-- Alta, edición y eliminación de productos
-- Búsqueda rápida por nombre
-- Visualización de stock y precios
-
-<p>
-  <img src="screenshots/light_mode_spanish/main_page.jpg" alt="Gestión de productos" width="150"/>
-  <img src="screenshots/light_mode_spanish/search_bar.jpg" alt="Barra de búsqueda" width="150"/>
-</p>
-
-### 2. Reportes de ventas
-- Página dedicada a reportes diarios (pestaña "Reportes")
-- Visualización de ventas por día y selector de fecha
-- Resumen diario: total de productos vendidos y monto total
-- Lista detallada de productos vendidos
-- Manejo de estados vacíos y errores
-
-<p>
-  <img src="screenshots/light_mode_spanish/sales_page.jpg" alt="Reportes de ventas" width="150"/>
-</p>
-
-### 3. Configuración y experiencia de usuario
-- Base de datos local SQLite
-- Navegación y estado persistente entre sesiones
-- Interfaz moderna y responsiva
-- Soporte multilenguaje (español, inglés, portugués)
-- Modo oscuro disponible en todas las funcionalidades
-
-<p>
-  <img src="screenshots/light_mode_spanish/settings_page.jpg" alt="Página de configuración" width="150"/>
-</p>
-
-### 4. Personalización y extensibilidad
-- La aplicación está pensada para ser fácilmente personalizable.
-- Puedes agregar cualquier funcionalidad adicional en la vista "Tu Funcionalidad" (`your_feature`).
-- Ideal para desarrolladores que deseen adaptar la app a necesidades específicas o experimentar con nuevas características.
-
-<p>
-  <img src="screenshots/light_mode_spanish/your_feature_page.jpg" alt="Tu Funcionalidad Claro" width="150"/>
-</p>
+Stockito is an inventory and sales application developed in Flutter, designed for small businesses and entrepreneurs. It allows you to manage products, register sales, and view daily reports in a simple and efficient way. Additionally, it is highly customizable to fit the specific needs of your business. You can add a specific feature in the your_feature view according to your requirements.
 
 ---
 
-## 🛠️ Tecnologías y arquitectura
+## 📱 Main Features
+
+### 1. Product Management
+- Add, edit, and delete products
+- Quick search by name
+- View stock and prices
+
+<p>
+  <img src="screenshots/light_mode_english/main_page.jpg" alt="Product Management" width="150"/>
+  <img src="screenshots/light_mode_english/search_bar.jpg" alt="Search Bar" width="150"/>
+</p>
+
+### 2. Sales Reports
+- Dedicated daily reports page ("Reports" tab)
+- View sales by day and date selector
+- Daily summary: total products sold and total amount
+- Detailed list of sold products
+- Handles empty and error states
+
+<p>
+  <img src="screenshots/light_mode_english/sales_page.jpg" alt="Sales Reports" width="150"/>
+</p>
+
+### 3. Settings and User Experience
+- Local SQLite database
+- Persistent navigation and state between sessions
+- Modern and responsive interface
+- Multilanguage support (Spanish, English, Portuguese)
+- Dark mode available in all features
+
+<p>
+  <img src="screenshots/light_mode_english/settings_page.jpg" alt="Settings Page" width="150"/>
+</p>
+
+### 4. Customization and Extensibility
+- The app is designed to be easily customizable.
+- You can add any additional functionality in the "Your Feature" view (`your_feature`).
+- Ideal for developers who want to adapt the app to specific needs or experiment with new features.
+
+<p>
+  <img src="screenshots/light_mode_english/your_feature_page.jpg" alt="Your Feature Light" width="150"/>
+</p>
+
+---
+
+## 🛠️ Technologies and Architecture
 
 - **Framework:** Flutter
-- **Gestión de estado:** BLoC (flutter_bloc)
-- **Inyección de dependencias:** GetIt
-- **Base de datos local:** SQLite (sqflite)
-- **Internacionalización:** flutter_localizations, archivos JSON
-- **Arquitectura:** Clean Architecture
+- **State management:** BLoC (flutter_bloc)
+- **Dependency injection:** GetIt
+- **Local database:** SQLite (sqflite)
+- **Internationalization:** flutter_localizations, JSON files
+- **Architecture:** Clean Architecture
 
 ---
 
-## 🚀 Instalación y ejecución
+## 🚀 Installation and Running
 
-1. Clona el repositorio:
+1. Clone the repository:
    ```sh
    git clone https://github.com/LesterCornielt/stockito-inventory-app.git
    cd stockito-inventory-app
    ```
-2. Instala las dependencias:
+2. Install dependencies:
    ```sh
    flutter pub get
    ```
-3. Ejecuta la app:
+3. Run the app:
    ```sh
    flutter run
    ```
 
 ---
 
-## 📂 Estructura del proyecto
+## 📂 Project Structure
 
-- `lib/core/` - Servicios base, utilidades y configuración de dependencias
-- `lib/features/` - Funcionalidades principales (productos, ventas, reportes, configuración)
-- `lib/l10n/` - Archivos de localización
-- `assets/` - Recursos gráficos
-- `screenshots/` - Capturas de pantalla
+- `lib/core/` - Base services, utilities, and dependency configuration
+- `lib/features/` - Main features (products, sales, reports, settings)
+- `lib/l10n/` - Localization files
+- `assets/` - Graphic resources
+- `screenshots/` - Screenshots
 
-Arquitectura basada en Clean Architecture, separando datos, dominio y presentación para facilitar el mantenimiento y escalabilidad.
+Architecture based on Clean Architecture, separating data, domain, and presentation to facilitate maintenance and scalability.
 
 ---
 
-## 🤝 ¿Cómo contribuir?
+## 🤝 How to Contribute?
 
-¡Las contribuciones son bienvenidas! Para colaborar:
+Contributions are welcome! To collaborate:
 
-1. Haz un fork del repositorio y clónalo localmente.
-2. Crea una rama para tu feature o fix:
+1. Fork the repository and clone it locally.
+2. Create a branch for your feature or fix:
    ```sh
-   git checkout -b mi-feature
+   git checkout -b my-feature
    ```
-3. Realiza tus cambios y haz commits descriptivos.
-4. Asegúrate de que la app compile y siga las buenas prácticas actuales del proyecto.
-5. Haz push a tu fork y abre un Pull Request hacia `main`.
-6. Describe claramente tu aporte en el PR.
+3. Make your changes and write descriptive commits.
+4. Make sure the app compiles and follows the current best practices of the project.
+5. Push to your fork and open a Pull Request to `main`.
+6. Clearly describe your contribution in the PR.
 
-**Recomendaciones:**
-- Sigue la arquitectura y patrones existentes (Clean Architecture, BLoC, etc).
+**Recommendations:**
+- Follow the existing architecture and patterns (Clean Architecture, BLoC, etc).
 
 ---
 
-## 📝 Licencia
+## 📝 License
 
-Licencia MIT. Consulta el archivo LICENSE para más detalles.
+MIT License. See the LICENSE file for more details.
 
