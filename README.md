@@ -13,14 +13,18 @@ Stockito es una aplicación de inventario y ventas desarrollada en Flutter, pens
 - Búsqueda rápida por nombre
 - Visualización de stock y precios
 
-<img src="screenshots/light_mode_spanish/main_page.jpg" alt="Gestión de productos" width="250"/>
-<img src="screenshots/light_mode_spanish/search_bar.jpg" alt="Barra de búsqueda" width="250"/>
+<p>
+  <img src="screenshots/light_mode_spanish/main_page.jpg" alt="Gestión de productos" width="150"/>
+  <img src="screenshots/light_mode_spanish/search_bar.jpg" alt="Barra de búsqueda" width="150"/>
+</p>
 
 ### 2. Registro y control de ventas
 - Registro automático de ventas al reducir stock
 - Detalle de cada venta: producto, cantidad, precio, monto total, fecha y hora
 
-<img src="screenshots/light_mode_spanish/sales_page.jpg" alt="Página de ventas" width="250"/>
+<p>
+  <img src="screenshots/light_mode_spanish/sales_page.jpg" alt="Página de ventas" width="150"/>
+</p>
 
 ### 3. Reportes de ventas
 - Página dedicada a reportes diarios (pestaña "Reportes")
@@ -29,7 +33,9 @@ Stockito es una aplicación de inventario y ventas desarrollada en Flutter, pens
 - Lista detallada de productos vendidos
 - Manejo de estados vacíos y errores
 
-<img src="screenshots/light_mode_spanish/sales_page.jpg" alt="Reportes de ventas" width="250"/>
+<p>
+  <img src="screenshots/light_mode_spanish/sales_page.jpg" alt="Reportes de ventas" width="150"/>
+</p>
 
 ### 4. Configuración y experiencia de usuario
 - Base de datos local SQLite
@@ -37,7 +43,9 @@ Stockito es una aplicación de inventario y ventas desarrollada en Flutter, pens
 - Interfaz moderna y responsiva
 - Soporte multilenguaje (español, inglés, portugués)
 
-<img src="screenshots/light_mode_spanish/settings_page.jpg" alt="Página de configuración" width="250"/>
+<p>
+  <img src="screenshots/light_mode_spanish/settings_page.jpg" alt="Página de configuración" width="150"/>
+</p>
 
 ---
 
