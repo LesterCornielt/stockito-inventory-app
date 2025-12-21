@@ -282,10 +282,10 @@ integration_test/
 - [ ] Escribir primeros tests de ejemplo
 
 ### **Fase 2: Domain Layer** (Semana 2)
-- [ ] Tests de use cases de productos
-- [ ] Tests de use cases de ventas
-- [ ] Tests de entidades
-- [ ] Alcanzar 90%+ cobertura en domain
+- [x] Tests de use cases de productos
+- [x] Tests de use cases de ventas
+- [x] Tests de entidades
+- [x] Alcanzar 90%+ cobertura en domain
 
 ### **Fase 3: Data Layer** (Semana 3)
 - [ ] Tests de data sources
@@ -393,12 +393,6 @@ genhtml coverage/lcov.info -o coverage/html
 ### Tests de Integración
 - [ ] Flujos críticos de usuario
 
-### CI/CD
-- [ ] Pipeline configurado
-- [ ] Cobertura integrada
-- [ ] Badges en README
-
----
 
 ## 🎓 Buenas Prácticas
 
