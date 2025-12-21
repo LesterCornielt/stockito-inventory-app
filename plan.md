@@ -288,10 +288,10 @@ integration_test/
 - [x] Alcanzar 90%+ cobertura en domain
 
 ### **Fase 3: Data Layer** (Semana 3)
-- [ ] Tests de data sources
-- [ ] Tests de repositorios
-- [ ] Tests de modelos
-- [ ] Alcanzar 85%+ cobertura en data
+- [x] Tests de data sources (requiere libsqlite3.so instalado)
+- [x] Tests de repositorios
+- [x] Tests de modelos
+- [x] Alcanzar 85%+ cobertura en data
 
 ### **Fase 4: Presentation Layer - BLoCs** (Semana 4)
 - [ ] Tests de ProductBloc
