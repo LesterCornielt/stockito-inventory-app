@@ -110,4 +110,14 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'stockito.db');
     await databaseFactory.deleteDatabase(path);
   }
+
+  /// Sets a test database (for testing only)
+  static void setTestDatabase(Database testDb) {
+    _database = testDb;
+  }
+
+  /// Resets the database (for testing only)
+  static void resetDatabase() {
+    _database = null;
+  }
 }
