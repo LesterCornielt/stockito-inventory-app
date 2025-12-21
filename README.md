@@ -100,6 +100,111 @@ Architecture based on Clean Architecture, separating data, domain, and presentat
 
 ---
 
+## 🧪 Testing
+
+Stockito includes a complete suite of automated tests following Flutter and Clean Architecture best practices.
+
+### Types of Tests
+
+#### 1. **Unit Tests**
+- **Coverage**: Use cases, entities, models, repositories, data sources
+- **Location**: `test/unit/`
+- **Status**: ✅ Implemented
+  - Domain Layer: Use cases and entities (56 tests)
+  - Data Layer: Models and repositories (36 tests)
+
+#### 2. **Widget Tests**
+- **Coverage**: Pages, custom widgets, BLoC interaction
+- **Location**: `test/widget/`
+- **Status**: ✅ Implemented
+
+#### 3. **Integration Tests**
+- **Coverage**: Complete end-to-end flows
+- **Location**: `integration_test/`
+- **Status**: 📋 Planned
+
+### Running Tests
+
+```bash
+# Run all tests
+flutter test
+
+# Run tests with coverage
+flutter test --coverage
+
+# Run tests for a specific feature
+flutter test test/unit/features/products/
+
+# Run a specific test
+flutter test test/unit/features/products/domain/entities/product_test.dart
+```
+
+### Viewing Code Coverage
+
+```bash
+# Generate HTML coverage report
+genhtml coverage/lcov.info -o coverage/html
+
+# Open in browser
+xdg-open coverage/html/index.html  # Linux
+open coverage/html/index.html      # macOS
+```
+
+### Test Structure
+
+```
+test/
+├── unit/                          # Unit tests
+│   ├── features/
+│   │   ├── products/
+│   │   │   ├── domain/           # Use cases and entities
+│   │   │   └── data/             # Models and repositories
+│   │   └── sales/
+│   │       ├── domain/
+│   │       └── data/
+│   └── core/                      # Base service tests
+├── widget/                        # Widget tests
+│   └── features/
+│       ├── products/
+│       ├── sales/
+│       ├── navigation/
+│       └── settings/
+├── helpers/                       # Helpers and utilities
+│   ├── mock_data.dart            # Reusable test data
+│   ├── test_helpers.dart         # Auxiliary functions
+│   ├── bloc_test_helpers.dart   # BLoC helpers
+│   └── widget_test_helpers.dart # Widget test helpers
+└── integration_test/              # Integration tests
+```
+
+### Tools and Dependencies
+
+The following tools are used for testing:
+
+- **flutter_test**: Flutter testing framework (included in SDK)
+- **bloc_test**: BLoC and state management testing
+- **mockito**: Creating mocks for dependencies
+- **sqflite_common_ffi**: In-memory database for desktop tests
+- **fake_async**: Time control in asynchronous tests
+
+### Available Helpers
+
+The project includes reusable helpers to facilitate test writing:
+
+- **MockData**: Predefined test data (products, sales)
+- **TestHelpers**: Functions to configure test database
+- **BlocTestHelpers**: Utilities specific to BLoC testing
+- **WidgetTestHelpers**: Helpers for widget testing setup
+
+### Additional Documentation
+
+For more information about testing, see:
+- [`test/README.md`](test/README.md) - Complete testing guide
+- [`plan.md`](plan.md) - Test implementation plan
+- [`test/EJECUTAR_TESTS.md`](test/EJECUTAR_TESTS.md) - Detailed execution guide
+
+---
+
 ## 🤝 How to Contribute?
 
 Contributions are welcome! To collaborate:
