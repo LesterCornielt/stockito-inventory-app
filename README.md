@@ -100,6 +100,111 @@ Arquitetura baseada em Clean Architecture, separando dados, domínio e apresenta
 
 ---
 
+## 🧪 Testes
+
+O Stockito inclui uma suíte completa de testes automatizados seguindo as melhores práticas do Flutter e Clean Architecture.
+
+### Tipos de Testes
+
+#### 1. **Testes Unitários**
+- **Cobertura**: Casos de uso, entidades, modelos, repositórios, fontes de dados
+- **Localização**: `test/unit/`
+- **Status**: ✅ Implementado
+  - Camada de Domínio: Casos de uso e entidades (56 testes)
+  - Camada de Dados: Modelos e repositórios (36 testes)
+
+#### 2. **Testes de Widgets**
+- **Cobertura**: Páginas, widgets personalizados, interação com BLoC
+- **Localização**: `test/widget/`
+- **Status**: ✅ Implementado
+
+#### 3. **Testes de Integração**
+- **Cobertura**: Fluxos completos end-to-end
+- **Localização**: `integration_test/`
+- **Status**: 📋 Planejado
+
+### Executar Testes
+
+```bash
+# Executar todos os testes
+flutter test
+
+# Executar testes com cobertura
+flutter test --coverage
+
+# Executar testes de uma feature específica
+flutter test test/unit/features/products/
+
+# Executar um teste específico
+flutter test test/unit/features/products/domain/entities/product_test.dart
+```
+
+### Ver Cobertura de Código
+
+```bash
+# Gerar relatório HTML de cobertura
+genhtml coverage/lcov.info -o coverage/html
+
+# Abrir no navegador
+xdg-open coverage/html/index.html  # Linux
+open coverage/html/index.html      # macOS
+```
+
+### Estrutura de Testes
+
+```
+test/
+├── unit/                          # Testes unitários
+│   ├── features/
+│   │   ├── products/
+│   │   │   ├── domain/           # Casos de uso e entidades
+│   │   │   └── data/             # Modelos e repositórios
+│   │   └── sales/
+│   │       ├── domain/
+│   │       └── data/
+│   └── core/                      # Testes de serviços base
+├── widget/                        # Testes de widgets
+│   └── features/
+│       ├── products/
+│       ├── sales/
+│       ├── navigation/
+│       └── settings/
+├── helpers/                       # Helpers e utilitários
+│   ├── mock_data.dart            # Dados de teste reutilizáveis
+│   ├── test_helpers.dart         # Funções auxiliares
+│   ├── bloc_test_helpers.dart   # Helpers para BLoC
+│   └── widget_test_helpers.dart # Helpers para testes de widgets
+└── integration_test/              # Testes de integração
+```
+
+### Ferramentas e Dependências
+
+As seguintes ferramentas são usadas para testes:
+
+- **flutter_test**: Framework de testes do Flutter (incluído no SDK)
+- **bloc_test**: Testes de BLoCs e gerenciamento de estado
+- **mockito**: Criação de mocks para dependências
+- **sqflite_common_ffi**: Banco de dados em memória para testes em desktop
+- **fake_async**: Controle de tempo em testes assíncronos
+
+### Helpers Disponíveis
+
+O projeto inclui helpers reutilizáveis para facilitar a escrita de testes:
+
+- **MockData**: Dados de teste predefinidos (produtos, vendas)
+- **TestHelpers**: Funções para configurar banco de dados de teste
+- **BlocTestHelpers**: Utilitários específicos para testes de BLoC
+- **WidgetTestHelpers**: Helpers para configuração de testes de widgets
+
+### Documentação Adicional
+
+Para mais informações sobre testes, consulte:
+- [`test/README.md`](test/README.md) - Guia completo de testes
+- [`plan.md`](plan.md) - Plano de implementação de testes
+- [`test/EJECUTAR_TESTS.md`](test/EJECUTAR_TESTS.md) - Guia detalhado de execução
+
+---
+
 ## 🤝 Como Contribuir?
 
 Contribuições são bem-vindas! Para colaborar:
