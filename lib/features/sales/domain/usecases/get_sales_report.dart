@@ -112,6 +112,10 @@ class GetSalesReport {
       );
     }
 
+    productReports.sort(
+      (a, b) => a.productName.toLowerCase().compareTo(b.productName.toLowerCase()),
+    );
+
     return DailySalesReport(
       date: day,
       productReports: productReports,
