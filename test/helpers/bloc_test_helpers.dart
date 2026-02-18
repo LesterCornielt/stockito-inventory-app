@@ -1,6 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:bloc_test/bloc_test.dart';
-
 /// Helpers específicos para testing de BLoCs
 class BlocTestHelpers {
   /// Helper para verificar que un BLoC emite estados en orden

@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stockito/features/navigation/presentation/bloc/navigation_bloc.dart';
-import 'package:stockito/features/navigation/presentation/bloc/navigation_state.dart';
 
 void main() {
   group('NavigationBloc', () {
@@ -23,4 +22,3 @@ void main() {
     // will provide better coverage of the actual behavior.
   });
 }
-
